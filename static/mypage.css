@@ -1,0 +1,218 @@
+body {
+  margin: 0 auto;
+}
+
+/* 헤더 */
+#desktop-header {
+  background-color: white;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid lightgray;
+}
+#desktop-header #desktop-header-wrapper {
+  max-width: 950px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 헤더 - 로고 */
+#desktop-header-wrapper #logo-wrapper {
+  width: 33.3%;
+}
+#desktop-header-wrapper #logo-wrapper img {
+  width: 40%;
+  height: 40%;
+}
+
+/* 헤더 - 검색 */
+#desktop-header-wrapper #search-wrapper {
+  margin: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: gray;
+  width: 33.3%;
+  height: 34px;
+  border: 1px solid lightgray;
+  background-color: rgba(215, 215, 215, 0.1);
+  border-radius: 3px;
+  padding-left: 15px;
+}
+#desktop-header-wrapper #search-wrapper img {
+  width: 4%;
+  opacity: 0.5;
+}
+#desktop-header-wrapper #search-wrapper p {
+  margin-left: 2%;
+  font-size: 13px;
+}
+
+/* 헤더 - 아이콘 */
+#desktop-header-wrapper #header-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 33.3%;
+}
+#desktop-header-wrapper #header-icon-wrapper img {
+  margin: 0% 3.5%;
+  width: 8%;
+}
+
+/* 마이페이지-프로필*/
+#mypage-profile {
+
+  max-width: 880px;
+  margin: 0 auto;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+/* 마이페이지-프로필 사진, 정보*/
+#myinfo-container {
+  display: flex;
+}
+/* 마이페이지-왼쪽 프로필 사진 */
+#myinfo-container .left-wrapper {
+  margin-left: 3%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+#myinfo-container #left-wrapper img {
+  width: 10vw;
+  height: 10vw;
+  min-width: 150px;
+  min-height: 150px;
+  border-radius: 50%;
+  border: 1px solid lightgray;
+  margin: 3% 30%;
+}
+/* 마이페이지-프로필 정보 */
+#myinfo-container #right-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 3%;
+}
+#myinfo-container #right-wrapper #box1 {
+  display: flex;
+  justify-content: left;
+  margin-left: 140px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  max-height: 28px;
+}
+#myinfo-container #right-wrapper #box1 #id {
+  font-size: 28px;
+  font-weight: 300;
+  margin: -5px 0 -6px;
+}
+#myinfo-container #right-wrapper #box1 #follow-button {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  font-weight: 600;
+  padding: 5px 9px;
+  text-align: center;
+  text-transform: inherit;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  line-height: 18px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background-color: rgba(var(--d69,0,149,246),1);
+  color: white;
+  margin: 0 30px;
+}
+#myinfo-container #right-wrapper #box2 {
+  display: flex;
+  justify-content: left;
+  margin-left: 140px;
+  margin-top: -10px;
+
+}
+#myinfo-container #right-wrapper #box2 .count {
+  margin-left: 40px;
+}
+#myinfo-container #right-wrapper #box3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  margin-left: 140px;
+  margin-bottom: 20px;
+  margin-top: -10px;
+}
+#myinfo-container #right-wrapper #box3 #myname {
+  font-size: 18px;
+}
+#myinfo-container #right-wrapper #box3 #status-message {
+  margin-top: -10px;
+}
+
+/* 마이페이지-마이 스토리 */
+#mystory-container {
+  margin-top: 40px;
+  display: flex;
+  overflow: hidden;
+}
+#mystory-container .story-wrapper {
+  padding: 3%;
+}
+#mystory-container .story-wrapper img {
+  width: 13vw;
+  max-width: 80px;
+  max-height: 80px;
+  height: 13vw;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background-image: linear-gradient(#f6f6f6, #f6f6f6),
+    linear-gradient(#c4c4c4, #c4c4c4);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+#mystory-container .story-wrapper p {
+  font-weight: 600;
+  height: 18px;
+  margin-top: 5px;
+  width: 80px;
+  text-align: center;
+}
+
+/* 마이페이지- 게시물 */
+#mypage-post {
+  margin: 0 auto;
+  border-top: 1px solid rgba(var(--b38,219,219,219),1);
+  color: #8e8e8e;
+  width: 52%;
+  margin-top: -80px;
+}
+#mypage-post #post-category {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+}
+#mypage-post #post-category .category {
+  margin-left: 70px;
+}
+
+#mypage-post #post-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: stretch;
+
+}
+#mypage-post .post-box img {
+  width: 260px;
+  height: 260px;
+  padding: 15px;
+}
