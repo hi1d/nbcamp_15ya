@@ -34,8 +34,8 @@
                         </div>
                         <div class="modal_wrap_write_content_right">
                             <div class="write_header">
-                                <img src="../static/profile/default.jpeg" alt="">
-                                <p> 사용자 </p>
+                                <img src="{{ user.profile }}" alt="">
+                                <p> {{ user.nickname }} </p>
                             </div>
                             <textarea name="" id="write_content" cols="30" rows="10" placeholder="문구 입력..."></textarea>
 
@@ -66,7 +66,7 @@
                                 <span class="material-icons-round">send</span>
                             </div>
                             <div>
-                                <span class="material-icons-round">bookmark_border</span>                            
+                                <span onclick="bookmark({{ feed.index }})" class="material-icons-round">bookmark_border</span>                            
                             </div>
                         </div>
                         <div style="margin:0 20px; text-align: left; font-size: 14px;"> 춘식이 <b>외 {{ feed.like_count }}명</b>이 좋아합니다. </div>

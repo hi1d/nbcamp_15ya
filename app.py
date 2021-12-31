@@ -174,10 +174,14 @@ def feed_upload():
         if valid['result'] == True:
             # 로그인 상태로 접근시
             if request.method == 'GET':
+                user_info = {
+                    'nickname': valid['nickname'],
+                    'profile': valid['profile_image']
+                }
 
-                feeds = list(db.feeds.find(
-                    {}, {'_id': 0, 'email': 0}))
-                return render_template('feed.html', feeds=feeds)
+                feeds = (list(db.feeds.find(
+                    {}, {'_id': 0, 'email': 0})))[::-1]
+                return render_template('feed.html', feeds=feeds, user=user_info)
 
             else:
                 file = request.files['file']
@@ -240,7 +244,7 @@ def feed_delete():
 # comment
 
 
-@app.route('/api/comment', methods=['POST'])
+@ app.route('/api/comment', methods=['POST'])
 def comment():
     valid = valid_token()
     try:
@@ -296,7 +300,7 @@ def comment_delete():
 # 내 이메일로 내 프로필 정보 찾기
 
 
-@app.route("/mypage", methods=["GET"])
+@ app.route("/mypage", methods=["GET"])
 def mypage():
     valid = valid_token()
     try:
@@ -312,7 +316,42 @@ def mypage():
 
         # 내 이메일로 내가 포스팅한 이미지 가져오기
 
-# ---------------------------------------------------
+        # ---------------------------------------------------
+
+
+@ app.route('/bookmark', methods=['GET', 'POST'])
+def bookmark():
+    valid = valid_token()
+    try:
+        if valid['result'] == True:
+            if request.method == 'GET':
+                target_bookmark = (db.users.find_one(
+                    {'email': valid['email']}))['bookmark']
+                feeds = db.feeds.find({}, {'_id': 0, 'email': 0})
+                bookmark_feed = []
+                for feed in feeds:
+                    if feed['index'] in target_bookmark:
+                        bookmark_feed.append(feed['image'])
+                    else:
+                        continue
+
+                return jsonify({'bookmark': bookmark_feed})
+            else:
+                email = valid['email']
+                index = int(request.form['index_give'])
+                target = (db.users.find_one({'email': email}))['bookmark']
+                if index in target:
+                    target.pop(target.index(index))
+                    db.users.update_one({'email': email}, {
+                                        '$set': {'bookmark': target}})
+                    return jsonify({'result': 'success', 'msg': '북마크 취소'})
+                target.append(index)
+                db.users.update_one({'email': email}, {
+                                    '$set': {'bookmark': target}})
+
+                return jsonify({'result': 'success', 'msg': '북마크완료'})
+    except TypeError:
+        return jsonify({'msg': 'error'})
 
 
 if __name__ == '__main__':

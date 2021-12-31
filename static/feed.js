@@ -151,3 +151,22 @@ function feed_delete(index){
     });
     
 }
+
+
+function bookmark(index){
+    $.ajax({
+    type: "POST",
+    url: "/bookmark",
+    data: {
+        index_give:index
+    },
+    success: function (response) {
+        if (response['result'] == 'success'){
+            alert(response['msg'])
+            window.location.replace('/')
+        } else {
+            alert('북마크 실패')
+        }
+    },
+});
+}

@@ -15,3 +15,7 @@
 >> mypage app.py 작성
 >>> comment 생성 & 삭제 js
 >>>> comment 생성 & 삭제 app.py 작성
+
+# 2021.12.31 (금)
+> bookmark.js
+>> bookmark app.py 작성

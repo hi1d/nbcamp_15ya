@@ -215,3 +215,9 @@ body {
   height: 260px;
   margin: 0 5px;
 }
+
+#mypage-post .bookmark-box img {
+  width: 250px;
+  height: 260px;
+  margin: 0 5px;
+}

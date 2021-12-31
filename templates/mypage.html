@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="../static/mypage.js"></script>
     <link rel="stylesheet" href="../static/mypage.css">
     <title>Instagram</title>
     <script>
@@ -72,20 +71,22 @@
     </div>
     <div id="mypage-post">
         <div id="post-category">
-            <p class="category">게시물</p>
-            <p onclick="test()" class="category">저장됨</p>
+            <p onclick="mypage_feed()"class="category">게시물</p>
+            <p onclick="bookmark()" class="category">저장됨</p>
             <p class="category">태그됨</p>
         </div>
         <div id="post-boxes">
             {% for image in feed %}
-            <div class="post-box">
-                <img src={{ image.image}}>
+            <div class="post-box" id="posting_box">
+                <img src={{ image.image }}>
             </div>
             {% endfor %}
+            <div class="bookmark-box" id="bookmark_box">
+            </div>
+
+
         </div>
     </div>
-
-<script>
-</script>
+<script src="../static/bookmark.js"></script>
 </body>
 </html>
