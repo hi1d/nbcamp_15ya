@@ -71,16 +71,19 @@
                         </div>
                         <div style="margin:0 20px; text-align: left; font-size: 14px;"> 춘식이 <b>외 {{ feed.like_count }}명</b>이 좋아합니다. </div>
                         <div style="margin:0 20px; text-align: left; font-size: 16px;"> <b>{{ feed.author }}</b> {{ feed.content }}</div>
-                        <div style="margin:0 20px; text-align: left; font-size: 13px;"> <b>aaa111</b> 제주도 </div>
-                        <div style="margin:0 20px; text-align: left; font-size: 13px;"> <b>bbb111</b> 제주도 2 </div>
-                        <div style="margin:0 20px; text-align: left; font-size: 13px;"> <b>ccc111</b> 제주도 3 </div>
+                        {% for comment in feed.comment %}
+                        <div style="margin:0 20px; text-align: left; font-size: 13px;"> <b>{{ comment.author }}</b> {{ comment.content }} </div>
+                        <span onclick="delete_comment( {{ feed.index }} , {{ comment.comment_index }} )" id="write_comment">삭제</span>
+                        {% endfor %}
                         <div style="border-top: solid grey 1px">
-                            <input type="text" class="form-control" style="box-shadow: none; border:none; outline: none;" id="exampleFormControlInput1" placeholder="댓글달기">
+                            <input type="text" class="form-control" style="box-shadow: none; border:none; outline: none;" id="comment_write_{{ loop.index }}" placeholder="댓글달기">
+                            <span onclick="write_comment( {{ feed.index }} )" id="write_comment">게시</span>
                         </div>
                         <button onclick="feed_delete({{ feed.index }})" id="feed_delete">삭제</button>
                     </div>
                 {% endfor %}
     
 <script src="../static/feed.js"></script>
+<script src="../static/comment.js"></script>
 </body>
 </html>

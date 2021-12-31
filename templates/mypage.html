@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="/static/mypage.js"></script>
+    <script src="../static/mypage.js"></script>
     <link rel="stylesheet" href="../static/mypage.css">
     <title>Instagram</title>
     <script>
@@ -19,23 +19,41 @@
     <div id="desktop-header">
         <div id="desktop-header-wrapper">
             <div id="logo-wrapper">
-                <img src="/static/mypage_img/insta-logo.png" />
+                <img src="../static/icons/logo.PNG" />
             </div>
             <div id="search-wrapper">
-                <img src="/static/mypage_img/search@3x.png">
+                <img src="../static/icons/search.png">
                 <p>검색</p>
             </div>
             <div id="header-icon-wrapper">
-                <img class="header-icon" src="/static/mypage_img/home@3x.png" />
-                <img class="header-icon" src="/static/mypage_img/dm@3x.png" />
-                <img class="header-icon" src="/static/mypage_img/trending@3x.png" />
-                <img class="header-icon" src="/static/mypage_img/like@3x.png" />
-                <img class="header-icon" src="/static/mypage_img/more@3x.png" />
+                <img class="header-icon" src="../static/icons/home.PNG" />
+                <img class="header-icon" src="../static/icons/messenger.PNG" />
+                <img class="header-icon" src="../static/icons/add.PNG" />
+                <img class="header-icon" src="../static/icons/like.PNG" />
+                <img class="header-icon" src="../static/icons/explore.PNG" />
             </div>
         </div>
     </div>
     <div id="mypage-profile">
         <div id="myinfo-container">
+            <div id="left-wrapper">
+                <img src={{ user.profile_image }}>
+            </div>
+            <div id="right-wrapper">
+                <div id="box1">
+                    <p id="id">{{ user.nickname }}</p>
+                    <button id="follow-button">팔로우</button>
+                </div>
+                <div id="box2">
+                    <p>게시물 <strong>{{ user.posting }}</strong></p>
+                    <p class="count">팔로워 <strong>{{ user.follower }}</strong></p>
+                    <p class="count">팔로우 <strong>{{ user.follow }}</strong></p>
+                </div>
+                <div id="box3">
+                    <p id="myname"><strong>{{ user.name }}</strong></p>
+                    <p id="status-message">{{ user.status_message }}</p>
+                </div>
+            </div>
         </div>
         <div id="mystory-container">
             <div class="story-wrapper">
@@ -55,12 +73,19 @@
     <div id="mypage-post">
         <div id="post-category">
             <p class="category">게시물</p>
-            <p class="category">동영상</p>
-            <p class="category">저장됨</p>
+            <p onclick="test()" class="category">저장됨</p>
             <p class="category">태그됨</p>
         </div>
         <div id="post-boxes">
+            {% for image in feed %}
+            <div class="post-box">
+                <img src={{ image.image}}>
+            </div>
+            {% endfor %}
         </div>
     </div>
+
+<script>
+</script>
 </body>
 </html>

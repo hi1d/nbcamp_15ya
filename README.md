@@ -9,3 +9,9 @@
 >피드 업로드 & 삭제
 >> 피드 업로드 & 삭제 js 
 >>> 피드 업로드 & 삭제 app.py 작성
+
+# 2021.12.30 (목)
+> mypage. js
+>> mypage app.py 작성
+>>> comment 생성 & 삭제 js
+>>>> comment 생성 & 삭제 app.py 작성
