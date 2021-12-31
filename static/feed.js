@@ -105,6 +105,7 @@ $('.modal_wrap_content_wrap')
     
 $('#modal_upload').click(function(){
     let file = files[0] 
+    console.log(files)
     let image = files[0].name
     let content = $('#write_content').val()
     let fd = new FormData()
@@ -121,14 +122,13 @@ $('#modal_upload').click(function(){
         success: function (response){
             if (response['result'] == 'success'){
                 alert(response['msg'])
-                window.location.replace('/')
+                window.location.replace('/api/feed_upload')
             } else {
                 alert('업로드 실패입니다.')
             }
         }
     })
 })
-
 
 function feed_delete(index){
     $.ajax({
@@ -140,11 +140,11 @@ function feed_delete(index){
         success: function (response) {
             if (response['result'] == 'success') {
                 alert(response['msg'])
-                window.location.replace("/")
+                window.location.replace('/api/feed_upload')
             }
             else{
                 alert(response['msg'])
-                window.location.replace("/")
+                window.location.replace('/api/feed_upload')
 
             }
         },
@@ -163,10 +163,30 @@ function bookmark(index){
     success: function (response) {
         if (response['result'] == 'success'){
             alert(response['msg'])
-            window.location.replace('/')
+            window.location.replace('/api/feed_upload')
         } else {
             alert('북마크 실패')
         }
     },
 });
+}
+
+function feed_like(index){
+    $.ajax({
+        type: "POST",
+        url: "/api/feed_like",
+        data: {
+            index_give:index
+        },
+        success: function (response) {
+            if (response['result'] == 'success') {
+                alert(response['msg'])
+                window.location.replace('/api/feed_upload')
+            }
+            else{
+                alert('좋아요 에러, 새로고침!')
+                window.location.replace('/api/feed_upload')
+            }
+        },
+    });
 }

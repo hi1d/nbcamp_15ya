@@ -31,12 +31,27 @@ def valid_token():
         return "로그인 시간이 만료되었습니다."
     except jwt.exceptions.DecodeError:
         return "로그인 정보가 존재하지 않습니다."
+
     else:
         search = db.users.find_one({'email': payload['id']})
-        nickname = search['nickname']
-        profile_image = search['profile_image']
-        return {'result': True, 'email': payload['id'], 'nickname': nickname, 'profile_image': profile_image}
+        try:
+            nickname = search['nickname']
+        except TypeError:
+            return redirect(url_for('check_status'))
+        else:
+            profile_image = search['profile_image']
+            like_feed = search['like_feed']
+            like_comment = search['like_comment']
+            return {'result': True, 'email': payload['id'], 'nickname': nickname, 'profile_image': profile_image, 'like_feed': like_feed, 'like_comment': like_comment}
 
+
+@app.route('/api/check_status')
+def check_status():
+    valid = valid_token()
+    if type(valid) == dict:
+        return jsonify({'result': True})
+    else:
+        return jsonify({'result': False})
 
 # 이메일 중복체크
 
@@ -60,6 +75,7 @@ def nowtime(time):
         time = str(time[0])+'시간전'
 
     return time
+
 
 # 메인화면
 
@@ -101,7 +117,7 @@ def login():
     if target is not None:
         payload = {
             'id': email_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+            'exp': datetime.utcnow() + timedelta(seconds=60*60)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -160,6 +176,8 @@ def register():
             'follow': 0,
             'status_message': '',
             'bookmark': [],
+            'like_feed': [],
+            'like_comment': []
         }
         db.users.insert_one(doc)
         return jsonify({'result': 'success'})
@@ -176,11 +194,15 @@ def feed_upload():
             if request.method == 'GET':
                 user_info = {
                     'nickname': valid['nickname'],
-                    'profile': valid['profile_image']
+                    'profile': valid['profile_image'],
+                    'email': valid['email'],
+                    'like_feed': valid['like_feed'],
+                    'like_comment': valid['like_comment']
                 }
 
                 feeds = (list(db.feeds.find(
-                    {}, {'_id': 0, 'email': 0})))[::-1]
+                    {}, {'_id': 0})))[::-1]
+                print(user_info['like_feed'])
                 return render_template('feed.html', feeds=feeds, user=user_info)
 
             else:
@@ -210,11 +232,14 @@ def feed_upload():
                     'like': 0,
                     'email': email,
                     'time': time,
-                    'comment': []
+                    'comment': [],
 
                 }
 
                 db.feeds.insert_one(doc)
+                posting = int((db.users.find_one({'email': email}))['posting'])
+                db.users.update_one({'email': email}, {
+                                    '$set': {'posting': posting+1}})
 
                 return jsonify({'result': 'success', 'msg': '업로드완료'})
     except TypeError:
@@ -235,25 +260,63 @@ def feed_delete():
                 {'email': email, 'index': index_receive})
             if result is not None:
                 db.feeds.delete_one({'email': email, 'index': index_receive})
+                posting = int((db.users.find_one({'email': email}))['posting'])
+                db.users.update_one({'email': email}, {
+                                    '$set': {'posting': posting-1}})
                 return jsonify({'result': 'success', 'msg': '삭제완료!'})
             else:
                 return jsonify({'result': 'failed', 'msg': '작성자만 삭제가 가능합니다.'})
     except TypeError:
         return redirect(url_for('home'))
 
-# comment
+# 유저, 피드구하기
 
+
+def like(index):
+    valid = valid_token()
+    try:
+        if valid['result'] == True:
+            feed = db.feeds.find_one({'index': index})
+            user = (db.users.find_one({'email': valid['email']}))
+            return {'feed': feed, 'user': user}
+    except TypeError:
+        return redirect(url_for('login'))
+
+# 피드_like
+
+
+@ app.route('/api/feed_like', methods=['POST'])
+def feed_like():
+    index = int(request.form['index_give'])
+    data = like(index)
+    user_like_list = data['user']['like_feed']
+    feed_like_count = data['feed']['like']
+    if index in user_like_list:
+        user_like_list.pop(user_like_list.index(index))
+        feed_like_count -= 1
+    else:
+        user_like_list.append(index)
+        feed_like_count += 1
+
+    db.users.update_one({'email': data['user']['email']}, {
+                        '$set': {'like_feed': user_like_list}})
+    db.feeds.update_one({'index': index}, {'$set': {'like': feed_like_count}})
+
+    return jsonify({'result': 'success', 'msg': '좋아요'})
+
+
+# comment 생성
 
 @ app.route('/api/comment', methods=['POST'])
 def comment():
     valid = valid_token()
     try:
         if valid['result'] == True:
+            email = valid['email']
             index = int(request.form['index_give'])
             content = request.form['content_give']
             author = valid['nickname']
             time = datetime.utcnow()
-
             comment = (db.feeds.find_one({'index': index}))['comment']
 
             try:
@@ -262,15 +325,16 @@ def comment():
                 comment_index = 1
             else:
                 comment_index = last_comment_index+1
-            comment.append({'comment_index': comment_index,
+            comment.append({'comment_index': comment_index, 'email': email,
                             'content': content, 'author': author, 'time': time})
             # time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f")
 
-            db.feeds.update({'index': index}, {'$set': {'comment': comment}})
+            db.feeds.update_one({'index': index}, {
+                                '$set': {'comment': comment}})
 
             return jsonify({'result': 'success', 'msg': '댓글이 입력되었습니다.'})
     except TypeError:
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
 
 # comment 삭제
 
@@ -284,11 +348,18 @@ def comment_delete():
             index_receive = int(request.form['index_give'])
             comment_index_receive = int(request.form['comment_index_give'])
             result = (db.feeds.find_one(
-                {'email': email, 'index': index_receive}))['comment']
+                {'index': index_receive}))['comment']
+            index = -1
 
-            result.pop(comment_index_receive-1)
-            db.feeds.update({'index': index_receive}, {
-                            '$set': {'comment': result}})
+            for i in range(len(result)):
+                if result[i]['comment_index'] == comment_index_receive and result[i]['email'] == email:
+                    index = i
+            if index == -1:
+                return jsonify({'result': 'failed', 'msg': '작성자만 삭제가능합니다.'})
+            result.pop(index)
+
+            db.feeds.update_one({'index': index_receive}, {
+                '$set': {'comment': result}})
 
             return jsonify({'result': 'success', 'msg': '삭제완료!'})
 
@@ -317,6 +388,8 @@ def mypage():
         # 내 이메일로 내가 포스팅한 이미지 가져오기
 
         # ---------------------------------------------------
+
+# 북마크
 
 
 @ app.route('/bookmark', methods=['GET', 'POST'])
@@ -351,7 +424,7 @@ def bookmark():
 
                 return jsonify({'result': 'success', 'msg': '북마크완료'})
     except TypeError:
-        return jsonify({'msg': 'error'})
+        return redirect(url_for('login'))
 
 
 if __name__ == '__main__':

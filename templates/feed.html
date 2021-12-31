@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- JQuery -->
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <!-- cookie -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="../static/feed.css">
     <title>feed_upload - 15ya</title>
 </head>
 <body>
+        <div></div>
+        <button onclick="logout()">로그아웃</button>
         <img src="../static/icons/add.PNG" class="icon" alt="" id="feed_upload">
         <div class="modal_container" id="modal-container">            
             <div class="modal_close">
@@ -28,6 +32,8 @@
                     <div class="modal_wrap_content_wrap">
                         <img id="modal_content_image" src="../static/icons/imagegallery.png" alt="">
                         <h2>사진을 여기에 끌어다 놓으세요</h2>
+                        <!-- <input id="file_input" name="feed_upload_file" type="file" placeholder="파일선택" onchange="input_file_upload()" accept="image/*"> -->
+
                     </div>
                     <div class="modal_wrap_write_wrap">
                         <div class="modal_wrap_write_content_left">
@@ -61,29 +67,39 @@
                         </div>
                         <div style="margin:15px 10px 0px 16px; display: flex; flex-direction: row; justify-content: space-between;">
                             <div>
-                                <span class="material-icons-outlined">favorite_border</span>
-                                <span class="material-icons-round">chat_bubble</span>
+                                {% if feed.index in user.like_feed %}
+                                <span onclick="feed_like({{ feed.index }})" class="material-icons-outlined">⭐️</span>
+                                {% else %}
+                                <span onclick="feed_like({{ feed.index }})" class="material-icons-outlined">🤍</span>
+                                {% endif %}
+                                <span onclick="test()" class="material-icons-round">chat_bubble</span>
                                 <span class="material-icons-round">send</span>
                             </div>
                             <div>
                                 <span onclick="bookmark({{ feed.index }})" class="material-icons-round">bookmark_border</span>                            
                             </div>
                         </div>
-                        <div style="margin:0 20px; text-align: left; font-size: 14px;"> 춘식이 <b>외 {{ feed.like_count }}명</b>이 좋아합니다. </div>
+                        <div style="margin:0 20px; text-align: left; font-size: 14px;"> 춘식이 <b>외 {{ feed.like }}명</b>이 좋아합니다. </div>
                         <div style="margin:0 20px; text-align: left; font-size: 16px;"> <b>{{ feed.author }}</b> {{ feed.content }}</div>
                         {% for comment in feed.comment %}
                         <div style="margin:0 20px; text-align: left; font-size: 13px;"> <b>{{ comment.author }}</b> {{ comment.content }} </div>
+                        {% if comment.email == user.email %}
                         <span onclick="delete_comment( {{ feed.index }} , {{ comment.comment_index }} )" id="write_comment">삭제</span>
+                        {% endif %}
                         {% endfor %}
                         <div style="border-top: solid grey 1px">
-                            <input type="text" class="form-control" style="box-shadow: none; border:none; outline: none;" id="comment_write_{{ loop.index }}" placeholder="댓글달기">
+                            <input type="text" class="form-control" style="box-shadow: none; border:none; outline: none;" id="comment_write_{{ feed.index }}" placeholder="댓글달기">
                             <span onclick="write_comment( {{ feed.index }} )" id="write_comment">게시</span>
                         </div>
+                        {% if feed.email == user.email %}
                         <button onclick="feed_delete({{ feed.index }})" id="feed_delete">삭제</button>
+                        {% endif %}
                     </div>
                 {% endfor %}
     
 <script src="../static/feed.js"></script>
 <script src="../static/comment.js"></script>
+<script src="../static/logout.js"></script>
+<script src="../static/index.js"></script>
 </body>
 </html>

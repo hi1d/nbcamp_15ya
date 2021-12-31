@@ -19,3 +19,6 @@
 # 2021.12.31 (금)
 > bookmark.js
 >> bookmark app.py 작성
+>>> feed.js 피드 좋아요 기능
+>>>> 피드 좋아요기능 app.py 작성 
+>>>>> 기타 오류 수정

@@ -10,7 +10,7 @@ function write_comment(index){
         success: function (response) {
             if (response['result'] == 'success') {
                 alert(response['msg'])
-                window.location.replace('/')
+                window.location.replace('/api/feed_upload')
             }
             else{
                 alert(response['msg'])
@@ -31,10 +31,11 @@ function delete_comment(index, comment_index){
         success: function (response) {
             if (response['result'] == 'success') {
                 alert(response['msg'])
-                // window.location.replace('/')
+                window.location.replace('/api/feed_upload')
             }
             else{
                 alert(response['msg'])
+                window.location.replace('/api/feed_upload')
             }
 
         },
