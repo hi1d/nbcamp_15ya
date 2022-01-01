@@ -20,5 +20,9 @@
 > bookmark.js
 >> bookmark app.py 작성
 >>> feed.js 피드 좋아요 기능
->>>> 피드 좋아요기능 app.py 작성 
+>>>> 피드 좋아요 기능 app.py 작성 
 >>>>> 기타 오류 수정
+
+# 2021.01.01 (토)
+> follow 팔로우 기능
+> > comment 좋아요

@@ -171,22 +171,6 @@ function bookmark(index){
 });
 }
 
-function feed_like(index){
-    $.ajax({
-        type: "POST",
-        url: "/api/feed_like",
-        data: {
-            index_give:index
-        },
-        success: function (response) {
-            if (response['result'] == 'success') {
-                alert(response['msg'])
-                window.location.replace('/api/feed_upload')
-            }
-            else{
-                alert('좋아요 에러, 새로고침!')
-                window.location.replace('/api/feed_upload')
-            }
-        },
-    });
+function test(){
+    alert('hello')
 }

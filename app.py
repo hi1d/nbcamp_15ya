@@ -42,7 +42,10 @@ def valid_token():
             profile_image = search['profile_image']
             like_feed = search['like_feed']
             like_comment = search['like_comment']
-            return {'result': True, 'email': payload['id'], 'nickname': nickname, 'profile_image': profile_image, 'like_feed': like_feed, 'like_comment': like_comment}
+            follow_list = search['follow_list']
+            return {'result': True, 'email': payload['id'], 'nickname': nickname,
+                    'profile_image': profile_image, 'like_feed': like_feed, 'like_comment': like_comment,
+                    'follow_list': follow_list}
 
 
 @app.route('/api/check_status')
@@ -172,12 +175,12 @@ def register():
             'password': password_hash,
             'profile_image': '../static/media/profile/default.jpeg',
             'posting': 0,
-            'follower': 0,
-            'follow': 0,
             'status_message': '',
             'bookmark': [],
             'like_feed': [],
-            'like_comment': []
+            'like_comment': [],
+            'follow_list': [],
+            'follower_list': []
         }
         db.users.insert_one(doc)
         return jsonify({'result': 'success'})
@@ -202,7 +205,6 @@ def feed_upload():
 
                 feeds = (list(db.feeds.find(
                     {}, {'_id': 0})))[::-1]
-                print(user_info['like_feed'])
                 return render_template('feed.html', feeds=feeds, user=user_info)
 
             else:
@@ -233,7 +235,6 @@ def feed_upload():
                     'email': email,
                     'time': time,
                     'comment': [],
-
                 }
 
                 db.feeds.insert_one(doc)
@@ -285,12 +286,13 @@ def like(index):
 # 피드_like
 
 
-@ app.route('/api/feed_like', methods=['POST'])
-def feed_like():
-    index = int(request.form['index_give'])
+@ app.route('/api/feed_like/<index>')
+def feed_like(index):
+    index = int(index)
     data = like(index)
     user_like_list = data['user']['like_feed']
     feed_like_count = data['feed']['like']
+
     if index in user_like_list:
         user_like_list.pop(user_like_list.index(index))
         feed_like_count -= 1
@@ -302,7 +304,7 @@ def feed_like():
                         '$set': {'like_feed': user_like_list}})
     db.feeds.update_one({'index': index}, {'$set': {'like': feed_like_count}})
 
-    return jsonify({'result': 'success', 'msg': '좋아요'})
+    return redirect(url_for('feed_upload'))
 
 
 # comment 생성
@@ -326,7 +328,8 @@ def comment():
             else:
                 comment_index = last_comment_index+1
             comment.append({'comment_index': comment_index, 'email': email,
-                            'content': content, 'author': author, 'time': time})
+                            'content': content, 'author': author, 'time': time,
+                            'comment_like': 0})
             # time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f")
 
             db.feeds.update_one({'index': index}, {
@@ -366,22 +369,53 @@ def comment_delete():
     except TypeError:
         return redirect(url_for('home'))
 
+
+# comment_like
+
+
+@ app.route('/api/comment_like/<index>,<comment_index>')
+def comment_like(index, comment_index):
+    index = int(index)
+    comment_index = int(comment_index)
+    data = like(index)
+    user_like_list = data['user']['like_comment']
+    comment_like_count = data['feed']['comment']
+    target_index = -1
+    for i in range(len(comment_like_count)):
+        if comment_like_count[i]['comment_index'] == comment_index:
+            target_index = i
+    if comment_index in user_like_list:
+        user_like_list.pop(user_like_list.index(comment_index))
+        comment_like_count[target_index]['comment_like'] -= 1
+    else:
+        user_like_list.append(comment_index)
+        comment_like_count[target_index]['comment_like'] += 1
+
+    db.users.update_one({'email': data['user']['email']}, {
+                        '$set': {'like_comment': user_like_list}})
+    db.feeds.update_one({'index': index}, {
+                        '$set': {'comment': comment_like_count}})
+
+    return redirect(url_for('feed_upload'))
+
+
 #-------------은경(마이페이지 부분)----------------------#
 
 # 내 이메일로 내 프로필 정보 찾기
 
 
-@ app.route("/mypage", methods=["GET"])
-def mypage():
+@ app.route("/mypage/<email>", methods=["GET"])
+def mypage(email):
     valid = valid_token()
     try:
         if valid['result'] == True:
-            user = valid['email']
             user_list = (db.users.find_one(
-                {'email': user}, {'_id': 0, 'password': 0, 'email': 0}))
+                {'email': email}, {'_id': 0, 'password': 0}))
             feed_list = db.feeds.find(
-                {'email': user}, {'_id': 0, 'password': 0, 'email': 0})
-            return render_template('mypage.html', user=user_list, feed=feed_list)
+                {'email': email}, {'_id': 0, 'password': 0, 'email': 0})
+            my_email = valid['email']
+            my_follow_list = valid['follow_list']
+            return render_template('mypage.html', user=user_list, feed=feed_list, my_email=my_email, follow_list=my_follow_list)
     except TypeError:
         return redirect(url_for('login'))
 
@@ -407,7 +441,6 @@ def bookmark():
                         bookmark_feed.append(feed['image'])
                     else:
                         continue
-
                 return jsonify({'bookmark': bookmark_feed})
             else:
                 email = valid['email']
@@ -421,23 +454,53 @@ def bookmark():
                 target.append(index)
                 db.users.update_one({'email': email}, {
                                     '$set': {'bookmark': target}})
-
                 return jsonify({'result': 'success', 'msg': '북마크완료'})
     except TypeError:
         return redirect(url_for('login'))
 
 ##스토리 페이지##
+
+
 @app.route('/story/<userid>')
 def storyView(userid):
-    img_list = list(db.users.find({'id':userid}, {'_id': False}))
+    img_list = list(db.users.find({'email': userid}, {'_id': False}))
     current = img_list[0]['index']
-    prev = db.users.find_one({'index':current-1})
-    next = db.users.find_one({'index':current+1})
+    prev = db.users.find_one({'index': current-1})
+    next = db.users.find_one({'index': current+1})
     if prev and next is not None:
         parameter_list = [prev['id'], next['id']]
     else:
-        parameter_list = ['../','../']
-    return render_template('story-page.html', arr=img_list, para = parameter_list)
+        parameter_list = ['../', '../']
+    return render_template('story-page.html', arr=img_list, para=parameter_list)
+
+# 팔로우
+
+
+@app.route('/api/follow/<email>')
+def follow(email):
+    # 2. 팔로우한사람만 피드 보이기
+    valid = valid_token()
+    try:
+        if valid['result'] == True:
+            my_email = valid['email']
+            my_info = (db.users.find_one({'email': my_email}))['follow_list']
+            target_info = (db.users.find_one({'email': email}))[
+                'follower_list']
+            if email in my_info:
+                my_info.pop(my_info.index(email))
+                target_info.pop(target_info.index(my_email))
+            else:
+                my_info.append(email)
+                target_info.append(my_email)
+            db.users.update_one({'email': my_email}, {
+                                '$set': {'follow_list': my_info}})
+            db.users.update_one({'email': email}, {
+                                '$set': {'follower_list': target_info}})
+            return redirect(url_for('mypage', email=email))
+
+    except TypeError:
+        return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

@@ -32,7 +32,7 @@
                     <div class="modal_wrap_content_wrap">
                         <img id="modal_content_image" src="../static/icons/imagegallery.png" alt="">
                         <h2>사진을 여기에 끌어다 놓으세요</h2>
-                        <!-- <input id="file_input" name="feed_upload_file" type="file" placeholder="파일선택" onchange="input_file_upload()" accept="image/*"> -->
+                        <!-- <input id="file_input" name="feed_upload_file" type="file" placeholder="파일선택" onchange="test()" accept="image/*"> -->
 
                     </div>
                     <div class="modal_wrap_write_wrap">
@@ -68,11 +68,11 @@
                         <div style="margin:15px 10px 0px 16px; display: flex; flex-direction: row; justify-content: space-between;">
                             <div>
                                 {% if feed.index in user.like_feed %}
-                                <span onclick="feed_like({{ feed.index }})" class="material-icons-outlined">⭐️</span>
+                                <span onclick='window.location.href = "/api/feed_like/{{ feed.index }}"' class="material-icons-outlined">⭐️</span>
                                 {% else %}
-                                <span onclick="feed_like({{ feed.index }})" class="material-icons-outlined">🤍</span>
+                                <span onclick='window.location.href = "/api/feed_like/{{ feed.index }}"' class="material-icons-outlined">🤍</span>
                                 {% endif %}
-                                <span onclick="test()" class="material-icons-round">chat_bubble</span>
+                                <span class="material-icons-round">chat_bubble</span>
                                 <span class="material-icons-round">send</span>
                             </div>
                             <div>
@@ -83,6 +83,15 @@
                         <div style="margin:0 20px; text-align: left; font-size: 16px;"> <b>{{ feed.author }}</b> {{ feed.content }}</div>
                         {% for comment in feed.comment %}
                         <div style="margin:0 20px; text-align: left; font-size: 13px;"> <b>{{ comment.author }}</b> {{ comment.content }} </div>
+                        {% if comment.email == user.email %}
+                        
+                        {% else %}
+                            {% if comment.comment_index in user.like_comment %}
+                            <span onclick='window.location.href = "/api/comment_like/{{ feed.index }}, {{comment.comment_index }}"' class="material-icons-outlined">⭐️</span>
+                            {% else %}
+                            <span onclick='window.location.href = "/api/comment_like/{{ feed.index }}, {{comment.comment_index }}"' class="material-icons-outlined">🤍</span>
+                            {% endif %}
+                        {% endif %}
                         {% if comment.email == user.email %}
                         <span onclick="delete_comment( {{ feed.index }} , {{ comment.comment_index }} )" id="write_comment">삭제</span>
                         {% endif %}

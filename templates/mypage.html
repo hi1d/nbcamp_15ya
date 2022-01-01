@@ -7,12 +7,6 @@
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <link rel="stylesheet" href="../static/mypage.css">
     <title>Instagram</title>
-    <script>
-
-
-
-    </script>
-
 </head>
 <body>
     <div id="desktop-header">
@@ -41,12 +35,20 @@
             <div id="right-wrapper">
                 <div id="box1">
                     <p id="id">{{ user.nickname }}</p>
-                    <button id="follow-button">팔로우</button>
+                    {% if user.email == my_email %}
+
+                    {% else %}
+                        {% if user.email in follow_list %}
+                        <button onclick="window.location.replace('/api/follow/{{ user.email }}')"id="unfollow-button" onclick="">언팔로우</button>
+                        {% else %}
+                        <button onclick="window.location.replace('/api/follow/{{ user.email }}')"id="follow-button" onclick="">팔로우</button>
+                        {% endif %}
+                    {% endif %}
                 </div>
                 <div id="box2">
                     <p>게시물 <strong>{{ user.posting }}</strong></p>
-                    <p class="count">팔로워 <strong>{{ user.follower }}</strong></p>
-                    <p class="count">팔로우 <strong>{{ user.follow }}</strong></p>
+                    <p class="count">팔로워 <strong>{{ user.follower_list | length }}</strong></p>
+                    <p class="count">팔로우 <strong>{{ user.follow_list | length }}</strong></p>
                 </div>
                 <div id="box3">
                     <p id="myname"><strong>{{ user.name }}</strong></p>
@@ -88,5 +90,6 @@
         </div>
     </div>
 <script src="../static/bookmark.js"></script>
+<script src="../static/follow.js"></script>
 </body>
 </html>
