@@ -426,6 +426,7 @@ def bookmark():
     except TypeError:
         return redirect(url_for('login'))
 
+
 # 검색 기능 ############ 수정 요청 1. 검색 시 나오는 user_list(프로필 이미지, 아이디 or 닉네임)################
 #############################  2. ../js/index.js ajex부분, function searching() 확인 요청 ################
 @app.route("/users", methods=["GET"])
@@ -433,7 +434,21 @@ def users_search():
     user_list = list(db.users.find({},{'_id': False}))
 
     return jsonify({'users': user_list})
-# 최근 검색 기록 : 차후 수정 예정
+# 최근 검색 기록 : 차후 추가 예정
+
+
+##스토리 페이지##
+@app.route('/story/<userid>')
+def storyView(userid):
+    img_list = list(db.users.find({'id':userid}, {'_id': False}))
+    current = img_list[0]['index']
+    prev = db.users.find_one({'index':current-1})
+    next = db.users.find_one({'index':current+1})
+    if prev and next is not None:
+        parameter_list = [prev['id'], next['id']]
+    else:
+        parameter_list = ['../','../']
+    return render_template('story-page.html', arr=img_list, para = parameter_list)
 
 
 if __name__ == '__main__':

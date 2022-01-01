@@ -37,7 +37,7 @@
             {% for user in users %}
             {% set profile_image = user.profile_image %}
             {% set nickname = user.nickname %}
-                <div class="story-wrapper" onclick="changecss()">
+                <div class="story-wrapper" onclick='window.location.href = "/story/{{id}}"'>
                     <div class="story-on">
                         <img src="{{ profile_image }}"/>
                     </div>
