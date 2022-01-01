@@ -426,6 +426,18 @@ def bookmark():
     except TypeError:
         return redirect(url_for('login'))
 
+##스토리 페이지##
+@app.route('/story/<userid>')
+def storyView(userid):
+    img_list = list(db.users.find({'id':userid}, {'_id': False}))
+    current = img_list[0]['index']
+    prev = db.users.find_one({'index':current-1})
+    next = db.users.find_one({'index':current+1})
+    if prev and next is not None:
+        parameter_list = [prev['id'], next['id']]
+    else:
+        parameter_list = ['../','../']
+    return render_template('story-page.html', arr=img_list, para = parameter_list)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
