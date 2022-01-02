@@ -33,4 +33,7 @@
 > > 검색기능 추가
 > > > index.html - feed, mypage, like 기능 연동
 > > > > 폴더 정리
-> 
+
+# 2021.01.03 (월)
+>user_setting.html, js, css 추가
+>>user_setting app.py 작성
