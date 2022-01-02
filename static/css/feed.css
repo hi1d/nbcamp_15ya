@@ -3,8 +3,8 @@ body {
 }
 
 .modal_container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -16,30 +16,41 @@ body {
   display: flex;
   position: absolute;
   top: 0;
-  background-color: #262626;
-  opacity: 0.95;
+  justify-content: center;
+  align-items: center;
 }
 
-.modal_container #modal_close_ {
+.modal_background .modal_back {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  background-color: #262626;
+  opacity: 0.98;
+}
+
+.modal_container #modal_close {
   width: 20px;
+  display: flex;
   position: absolute;
   right: 20px;
-  top: 20px;
+  top: 80px;
   z-index: 999;
 }
 
 .modal_container .modal_wrap {
-  width: 700px;
-  height: 772px;
+  width: 45%;
+  height: 70%;
   background: #fff;
-  margin: auto;
+  margin: 10% auto;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
   transition: all ease 0.3s;
+  position: fixed;
+  top: -30px;
 }
 .modal_wrap .modal_wrap_header {
   width: 100%;
@@ -58,7 +69,7 @@ body {
 .modal_wrap_header p {
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin: auto 0;
   margin-left: 30px;
 }
 

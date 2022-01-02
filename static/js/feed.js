@@ -1,18 +1,7 @@
 $(document).ready(function(){
     init()
-    get_feeds()
 });
 
-function get_feeds(){
-    $.ajax({
-        type: "GET",
-        url: "/api/feed_upload",
-        data: {
-        },
-        success: function (response) {
-        },
-    });
-}
 
 // 초기화 함수
 function init(){
@@ -38,12 +27,33 @@ function init(){
 // 모달 실행
 $('#feed_upload').click(function() {
     $('#modal-container').show()
+    $('.right_col').hide()
 })
 
 // 모달 종료
-$('#modal_close_').click(function() {
+
+function close(){
     init()
+    $('.right_col').show()
+}
+
+$('#modal_close').click(function() {
+    close()
 })
+
+$('.modal_back').click(function() {
+    close()
+})
+
+$('#modal-container').on('scroll touchmove mousewheel', function(event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  
+  });
+
+
 
 // 모달 이미지 올리기 & 올린 후 작성 모달변경
 $('.modal_wrap_content_wrap')
@@ -56,9 +66,9 @@ $('.modal_wrap_content_wrap')
                 event.preventDefault();
 
                 if (event.type == "dragover") {
-                    document.getElementById("modal_content_image").src ="../static/icons/imagegallery_on.png"
+                    document.getElementById("modal_content_image").src ="../static/img/icon/imagegallery_on.png"
                 } else {
-                    document.getElementById("modal_content_image").src ="../static/icons/imagegallery.png"
+                    document.getElementById("modal_content_image").src ="../static/img/icon/imagegallery.png"
                 }
             }
 
@@ -105,7 +115,6 @@ $('.modal_wrap_content_wrap')
     
 $('#modal_upload').click(function(){
     let file = files[0] 
-    console.log(files)
     let image = files[0].name
     let content = $('#write_content').val()
     let fd = new FormData()
@@ -122,7 +131,7 @@ $('#modal_upload').click(function(){
         success: function (response){
             if (response['result'] == 'success'){
                 alert(response['msg'])
-                window.location.replace('/api/feed_upload')
+                window.location.replace('/')
             } else {
                 alert('업로드 실패입니다.')
             }
@@ -140,11 +149,11 @@ function feed_delete(index){
         success: function (response) {
             if (response['result'] == 'success') {
                 alert(response['msg'])
-                window.location.replace('/api/feed_upload')
+                window.location.replace('/')
             }
             else{
                 alert(response['msg'])
-                window.location.replace('/api/feed_upload')
+                window.location.replace('/')
 
             }
         },
@@ -163,7 +172,7 @@ function bookmark(index){
     success: function (response) {
         if (response['result'] == 'success'){
             alert(response['msg'])
-            window.location.replace('/api/feed_upload')
+            window.location.replace('/')
         } else {
             alert('북마크 실패')
         }

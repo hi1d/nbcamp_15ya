@@ -26,3 +26,11 @@
 # 2021.01.01 (토)
 > follow 팔로우 기능
 > > comment 좋아요
+
+
+# 2021.01.02 (일)
+> index.html, js, css 추가
+> > 검색기능 추가
+> > > index.html - feed, mypage, like 기능 연동
+> > > > 폴더 정리
+> 

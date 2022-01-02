@@ -4,6 +4,7 @@ $(document).ready(function() {
     right_col_fixed()
     $(window).resize(function(){
         right_col_fixed()
+    $('#search_input').empty()
     });
     
     
@@ -49,8 +50,9 @@ $(document).ready(function() {
                 let users = response['users']
                 for (let i = 0; i < users.length; i++) {
                     let user_proflie = users[i]['profile_image'] //이미지 주소 맞는지 확인 요청
-                    let user_name = users[i]['name']
-                    let search_result_html = `<a href="/">
+                    let user_name = users[i]['nickname']
+                    let user_email = users[i]['email']
+                    let search_result_html = `<a href=/mypage/${user_email }>
                                                     <div class="info">
                                                         <div class="user">
                                                             <div class="profile_pic">

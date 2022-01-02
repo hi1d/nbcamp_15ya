@@ -43,18 +43,11 @@ def valid_token():
             like_feed = search['like_feed']
             like_comment = search['like_comment']
             follow_list = search['follow_list']
+            name = search['name']
             return {'result': True, 'email': payload['id'], 'nickname': nickname,
                     'profile_image': profile_image, 'like_feed': like_feed, 'like_comment': like_comment,
-                    'follow_list': follow_list}
+                    'follow_list': follow_list, 'name': name}
 
-
-@app.route('/api/check_status')
-def check_status():
-    valid = valid_token()
-    if type(valid) == dict:
-        return jsonify({'result': True})
-    else:
-        return jsonify({'result': False})
 
 # 이메일 중복체크
 
@@ -88,7 +81,11 @@ def home():
     valid = valid_token()
     try:
         if valid['result'] == True:
-            return render_template('index.html')
+            user_info = db.users.find_one({'email': valid['email']}, {
+                                          '_id': 0, 'password': 0})
+            feeds = (list(db.feeds.find(
+                {}, {'_id': 0})))[::-1]
+            return render_template('index.html', feeds=feeds, user=user_info)
     except TypeError:
         return redirect(url_for("login"))
 
@@ -188,61 +185,43 @@ def register():
 # 피드업로드
 
 
-@ app.route('/api/feed_upload', methods=['GET', 'POST'])
+@ app.route('/api/feed_upload', methods=['POST'])
 def feed_upload():
     valid = valid_token()
     try:
         if valid['result'] == True:
             # 로그인 상태로 접근시
-            if request.method == 'GET':
-                user_info = {
-                    'nickname': valid['nickname'],
-                    'profile': valid['profile_image'],
-                    'email': valid['email'],
-                    'like_feed': valid['like_feed'],
-                    'like_comment': valid['like_comment']
-                }
-
-                feeds = (list(db.feeds.find(
-                    {}, {'_id': 0})))[::-1]
-                return render_template('feed.html', feeds=feeds, user=user_info)
-
-            else:
-                file = request.files['file']
-                file_name = str(uuid4().hex)
-                email = valid['email']
-                author = valid['nickname']
-                profile_image = valid['profile_image']
-
-                file.save('./static/media/feed/' + secure_filename(file_name))
-                image = f'../static/media/feed/'+file_name
-                content = request.form.get('content')
-                time = datetime.utcnow()
-
-                latest_index = (db.feeds.find_one(
-                    {"$query": {}, "$orderby": {"index": -1}}))
-                try:
-                    index = latest_index['index']
-                except TypeError:
-                    index = 0
-                doc = {
-                    'index': 1+index,
-                    'image': image,
-                    'content': content,
-                    'author': author,
-                    'profile_image': profile_image,
-                    'like': 0,
-                    'email': email,
-                    'time': time,
-                    'comment': [],
-                }
-
-                db.feeds.insert_one(doc)
-                posting = int((db.users.find_one({'email': email}))['posting'])
-                db.users.update_one({'email': email}, {
-                                    '$set': {'posting': posting+1}})
-
-                return jsonify({'result': 'success', 'msg': '업로드완료'})
+            file = request.files['file']
+            file_name = str(uuid4().hex)
+            email = valid['email']
+            author = valid['nickname']
+            profile_image = valid['profile_image']
+            file.save('./static/media/feed/' + secure_filename(file_name))
+            image = f'../static/media/feed/'+file_name
+            content = request.form.get('content')
+            time = datetime.utcnow()
+            latest_index = (db.feeds.find_one(
+                {"$query": {}, "$orderby": {"index": -1}}))
+            try:
+                index = latest_index['index']
+            except TypeError:
+                index = 0
+            doc = {
+                'index': 1+index,
+                'image': image,
+                'content': content,
+                'author': author,
+                'profile_image': profile_image,
+                'like': 0,
+                'email': email,
+                'time': time,
+                'comment': [],
+            }
+            db.feeds.insert_one(doc)
+            posting = int((db.users.find_one({'email': email}))['posting'])
+            db.users.update_one({'email': email}, {
+                                '$set': {'posting': posting+1}})
+            return jsonify({'result': 'success', 'msg': '업로드완료'})
     except TypeError:
         return redirect(url_for('home'))
 
@@ -261,7 +240,19 @@ def feed_delete():
                 {'email': email, 'index': index_receive})
             if result is not None:
                 db.feeds.delete_one({'email': email, 'index': index_receive})
-                posting = int((db.users.find_one({'email': email}))['posting'])
+                user = db.users.find_one({'email': email})
+                posting = int(user['posting'])
+                like_feed = user['like_feed']
+                bookmark_feed = user['bookmark']
+                if index_receive in like_feed:
+                    like_feed.pop(like_feed.index(index_receive))
+                    db.users.update_one({'email': email}, {
+                                        '$set': {'like_feed': like_feed}})
+                elif index_receive in bookmark_feed:
+                    bookmark_feed.pop(bookmark_feed.index(index_receive))
+                    db.users.update_one({'email': email}, {
+                                        '$set': {'bookmark': bookmark_feed}})
+
                 db.users.update_one({'email': email}, {
                                     '$set': {'posting': posting-1}})
                 return jsonify({'result': 'success', 'msg': '삭제완료!'})
@@ -304,7 +295,7 @@ def feed_like(index):
                         '$set': {'like_feed': user_like_list}})
     db.feeds.update_one({'index': index}, {'$set': {'like': feed_like_count}})
 
-    return redirect(url_for('feed_upload'))
+    return redirect(url_for('home'))
 
 
 # comment 생성
@@ -463,7 +454,7 @@ def bookmark():
 #############################  2. ../js/index.js ajex부분, function searching() 확인 요청 ################
 @app.route("/users", methods=["GET"])
 def users_search():
-    user_list = list(db.users.find({},{'_id': False}))
+    user_list = list(db.users.find({}, {'_id': False}))
 
     return jsonify({'users': user_list})
 # 최근 검색 기록 : 차후 추가 예정
@@ -511,7 +502,6 @@ def follow(email):
 
     except TypeError:
         return redirect(url_for('login'))
-
 
 
 if __name__ == '__main__':

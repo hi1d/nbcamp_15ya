@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="/static/css/index_style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/static/js/index_script.js"></script>
+     <!-- cookie -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <!-- 피드.css -->
+    <link rel="stylesheet" href="../static/css/feed.css">
     <!-- 파비콘 달기 -->
     <title>15ya</title>
 </head>
@@ -42,7 +46,7 @@
             <!-- search box -->
             <!-- nav icon -->
             <div class="nav_items">
-                <a class="add_post" href="#">+ Add post</a>
+                <a id="feed_upload" class="add_post">+ Add post</a>
                 <ul class="icon_list">
                     <li><a href="#">
                         <span class="icon"><img src="/static/img/icon/home.svg" alt="home"></ion-icon></span>
@@ -78,107 +82,29 @@
                 <div class="stories_box">Stories</div>
                     <!-- post -->
                     <div class="main_posts">
+                        {% for feed in feeds %}
                         <div class="post_box">
-                            <img class="post_img" src="/static/img/2.jpg" alt="#">
+                            <img class="post_img" src="{{ feed.image }}" alt="#">
                             <div class="post_info">
                                 <div class="post_profile">
                                     <div class="profilet_img">
-                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                        <img src="{{ feed.profile_image }}" alt="user_name_proflie">
                                     </div>
-                                    <p>user_name</p>
+                                    <p>{{ feed.author }}</p>
                                 </div>
                                 <div class="post_icon">
-                                    <img src="/static/img/icon/heart.svg" alt="">
-                                    <span>11.4K</span>
+                                    {% if feed.index in user.like_feed %}
+                                    <img onclick='window.location.href = "/api/feed_like/{{ feed.index }}"' src="/static/img/icon/heart_full.svg" alt="">
+                                    {% else %}
+                                    <img onclick='window.location.href = "/api/feed_like/{{ feed.index }}"' src="/static/img/icon/heart.svg" alt="">
+                                    {% endif %}
+                                    <span>{{ feed.like }}</span>
                                     <img src="/static/img/icon/message-circle.svg" alt="">
-                                    <span>88</span>
+                                    <span>{{ feed.comment | length }}</span>
                                 </div> 
                             </div> 
                         </div>
-                        <!--------------------------------- 삭제 --------------------------------->
-                        <div class="post_box">
-                            <img class="post_img" src="/static/img/2.jpg" alt="#">
-                            <div class="post_info">
-                                <div class="post_profile">
-                                    <div class="profilet_img">
-                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
-                                    </div>
-                                    <p>user_name</p>
-                                </div>
-                                <div class="post_icon">
-                                    <img src="/static/img/icon/heart.svg" alt="">
-                                    <span>11.4K</span>
-                                    <img src="/static/img/icon/message-circle.svg" alt="">
-                                    <span>88</span>
-                                </div> 
-                            </div> 
-                        </div>
-                        <div class="post_box">
-                            <img class="post_img" src="/static/img/2.jpg" alt="#">
-                            <div class="post_info">
-                                <div class="post_profile">
-                                    <div class="profilet_img">
-                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
-                                    </div>
-                                    <p>user_name</p>
-                                </div>
-                                <div class="post_icon">
-                                    <img src="/static/img/icon/heart.svg" alt="">
-                                    <span>11.4K</span>
-                                    <img src="/static/img/icon/message-circle.svg" alt="">
-                                    <span>88</span>
-                                </div> 
-                            </div> 
-                        </div><div class="post_box">
-                            <img class="post_img" src="/static/img/2.jpg" alt="#">
-                            <div class="post_info">
-                                <div class="post_profile">
-                                    <div class="profilet_img">
-                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
-                                    </div>
-                                    <p>user_name</p>
-                                </div>
-                                <div class="post_icon">
-                                    <img src="/static/img/icon/heart.svg" alt="">
-                                    <span>11.4K</span>
-                                    <img src="/static/img/icon/message-circle.svg" alt="">
-                                    <span>88</span>
-                                </div> 
-                            </div> 
-                        </div><div class="post_box">
-                            <img class="post_img" src="/static/img/2.jpg" alt="#">
-                            <div class="post_info">
-                                <div class="post_profile">
-                                    <div class="profilet_img">
-                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
-                                    </div>
-                                    <p>user_name</p>
-                                </div>
-                                <div class="post_icon">
-                                    <img src="/static/img/icon/heart.svg" alt="">
-                                    <span>11.4K</span>
-                                    <img src="/static/img/icon/message-circle.svg" alt="">
-                                    <span>88</span>
-                                </div> 
-                            </div> 
-                        </div><div class="post_box">
-                            <img class="post_img" src="/static/img/2.jpg" alt="#">
-                            <div class="post_info">
-                                <div class="post_profile">
-                                    <div class="profilet_img">
-                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
-                                    </div>
-                                    <p>user_name</p>
-                                </div>
-                                <div class="post_icon">
-                                    <img src="/static/img/icon/heart.svg" alt="">
-                                    <span>11.4K</span>
-                                    <img src="/static/img/icon/message-circle.svg" alt="">
-                                    <span>88</span>
-                                </div> 
-                            </div> 
-                        </div>
-                        <!--------------------------------- 삭제 --------------------------------->
+                        {% endfor %}
                     </div>
                     <!-- post -->  
             </section>
@@ -190,28 +116,28 @@
                     <div class="profile">
                         <div class="post_profile">
                             <div class="profilet_img">
-                                <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                <img src="{{ user.profile_image }}" alt="user_name_proflie">
                             </div>
-                            <p>user_name</p>
-                            <p>@user_ nickname</p>
+                            <p>{{ user.name }}</p>
+                            <p>@{{ user.nickname }}</p>
                         </div>
                     </div>
                     <div class="button_list">
-                        <button>내 페이지 보기</button>
+                        <button onclick='window.location.href = "/mypage/{{ user.email }}"'>내 페이지 보기</button>
                         <button>프로필 편집</button>
-                        <button class="logout">로그아웃</button>
+                        <button onclick="logout()" class="logout">로그아웃</button>
                     </div>
                     <div class="abuot">
                         <div class="box">
-                            <span>324</span>
+                            <span>{{ user.posting }}</span>
                             <p>게시물</p>
                         </div>
                         <div class="box">
-                            <span>1.5 천</span>
-                            <p>팔로위</p>
+                            <span>{{ user.follower_list | length }}</span>
+                            <p>팔로윙</p>
                         </div>
                         <div class="box">
-                            <span>670</span>
+                            <span>{{ user.follow_list | length }}</span>
                             <p>팔로우</p>
                         </div>
                     </div>
@@ -224,5 +150,42 @@
         </main>
     </section>
     <!-- 컨텐츠 -->
+    <!-- 피드 모달 -->
+    <div class="modal_container" id="modal-container">            
+        <div class="modal_close">
+            <img src="../static/icons/close.png" alt="" id="modal_close">    
+        </div>
+        <div class="modal_background" >
+            <div class="modal_back"></div>
+            <div class="modal_wrap">
+                <label>　</label>
+                <div class="modal_wrap_header">
+                    <p>　</p>
+                    <p>새 게시물 만들기</p>
+                    <span id="modal_next"> 다음　</span>
+                    <span id="modal_upload"> 올리기 </span>
+                </div>
+                <div class="modal_wrap_content_wrap">
+                    <img id="modal_content_image" src="../static/img/icon/imagegallery.png" alt="">
+                    <h2>사진을 여기에 끌어다 놓으세요</h2>
+                </div>
+                <div class="modal_wrap_write_wrap">
+                    <div class="modal_wrap_write_content_left">
+                    </div>
+                    <div class="modal_wrap_write_content_right">
+                        <div class="write_header">
+                            <img src="{{ user.profile_image }}" alt="">
+                            <p> {{ user.nickname }} </p>
+                        </div>
+                        <textarea name="" id="write_content" cols="30" rows="10" placeholder="문구 입력..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 피드업로드 -->
+    <script src="../static/js/feed.js"></script>
+    <script src="../static/js/comment.js"></script>
+    <script src="../static/js/logout.js"></script>
 </body>
 </html>
