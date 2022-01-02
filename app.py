@@ -464,16 +464,70 @@ def users_search():
 
 
 @app.route('/story/<userid>')
-def storyView(userid):
-    img_list = list(db.users.find({'email': userid}, {'_id': False}))
-    current = img_list[0]['index']
-    prev = db.users.find_one({'index': current-1})
-    next = db.users.find_one({'index': current+1})
-    if prev and next is not None:
-        parameter_list = [prev['id'], next['id']]
-    else:
-        parameter_list = ['../', '../']
-    return render_template('story-page.html', arr=img_list, para=parameter_list)
+def showStories(userid):
+    # 현재 userid가 스토리 on/off 중 어떤 리스트에 속해있는지 확인
+    def onORoff(userid):
+        all_info = list(db.users.find({}))
+        all_count = len(all_info)
+        off_info = list(db.story_off.find({}))
+        off_count = len(off_info)
+        # on 리스트
+        if len(off_info) != 0:
+            on_list = []
+            for i in range(all_count):
+                for j in range(off_count):
+                    if off_info[j]['id'] == all_info[i]['id']:
+                        break
+                    elif off_info[j]['id'] != all_info[i]['id'] and j == off_count - 1:
+                        on_list.append(all_info[i])
+        elif off_count == 0:
+            on_list = all_info
+        # off 리스트
+        off_info = list(db.story_off.find({}))
+        off_list = list({off['id']: off for off in off_info}.values())
+
+        if next((x for x in on_list if x["id"] == userid), None) is not None:
+            return on_list
+        elif next((x for x in off_list if x["id"] == userid), None) is not None:
+            return off_list
+
+    # 현재 스토리의 전/후 인덱스 id 전달 
+    def idList(array, userid):
+        cur_index = next((i for i, x in enumerate(array) if x['id'] == userid), None)
+
+        all_count = len(array)
+        if cur_index == 0:
+            next_story = array[cur_index + 1]
+            id_list = ['/', next_story['id']]
+        elif cur_index == all_count - 1:
+            prev_story = array[cur_index - 1]
+            id_list = [prev_story['id'], '/']
+        else:
+            prev_story = array[cur_index - 1]
+            next_story = array[cur_index + 1]
+            id_list = [prev_story['id'], next_story['id']]
+        return id_list
+
+    id_list = idList(onORoff(userid), userid)
+    img_list = list(db.users.find({'id': userid}))
+    return render_template('story-page.html', img=img_list, id = id_list)
+
+
+@app.route('/off-list/add', methods=['POST'])
+def addOffList():
+    id = request.form['id']
+    profile = request.form['profile']
+
+    doc = {'id': id, 'img_url': profile}
+    db.story_off.insert_one(doc)  
+    return True
+
+
+@app.route('/off-list/drop', methods=['POST'])
+def dropOffList():
+    db.story_off.drop()
+    return True
+
 
 # 팔로우
 
