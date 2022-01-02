@@ -458,6 +458,17 @@ def bookmark():
     except TypeError:
         return redirect(url_for('login'))
 
+
+# 검색 기능 ############ 수정 요청 1. 검색 시 나오는 user_list(프로필 이미지, 아이디 or 닉네임)################
+#############################  2. ../js/index.js ajex부분, function searching() 확인 요청 ################
+@app.route("/users", methods=["GET"])
+def users_search():
+    user_list = list(db.users.find({},{'_id': False}))
+
+    return jsonify({'users': user_list})
+# 최근 검색 기록 : 차후 추가 예정
+
+
 ##스토리 페이지##
 
 
@@ -500,6 +511,7 @@ def follow(email):
 
     except TypeError:
         return redirect(url_for('login'))
+
 
 
 if __name__ == '__main__':

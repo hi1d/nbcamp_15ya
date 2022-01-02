@@ -1,13 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/index_style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/static/js/index_script.js"></script>
+    <!-- 파비콘 달기 -->
+    <title>15ya</title>
 </head>
 <body>
-    <h1> test </h1>
-    
+    <!-- header -->
+    <header>
+        <div class="header">
+            <a href=""><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
+            <!-- search box -->
+            <div class="search_wrap">
+                <!-- 검색창에 icon 넣기 -->
+                <input type="text" id="search_input" class="search_input" value="" placeholder="검색">
+                <div>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div>
+                    <span></span>
+                </div>
+                <div class="search_box">
+                    <div class="search_list">
+                        <div id="search_result_list" class="search_result_list">
+                        </div>
+                        <div class="recent_searches_box">
+                            <h4>최신 검색 항목</h4>
+                            <div class="recent_searches_list">
+                                <p>최신 검색 항목 없음.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- search box -->
+            <!-- nav icon -->
+            <div class="nav_items">
+                <a class="add_post" href="#">+ Add post</a>
+                <ul class="icon_list">
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/home.svg" alt="home"></ion-icon></span>
+                        <span class="text">Feed</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/send.svg" alt="send"> </span>
+                        <span class="text">Direct</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/bell.svg" alt="bell"></span>
+                        <span class="text">notification</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/bookmark.svg" alt="bookmark"></span>
+                        <span class="text">Favorites</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/settings.svg" alt="setting"></span>
+                        <span class="text">Setting</span>
+                    </a></li>
+                </ul>
+            </div>
+            <!-- nav icon -->
+        </div>
+    </header>
+    <!-- header -->
+    <!-- content -->
+    <section class="wrap">
+        <main>
+            <!-- left column -->
+            <section class="left_col">
+                <div class="stories_box">Stories</div>
+                    <!-- post -->
+                    <div class="main_posts">
+                        <div class="post_box">
+                            <img class="post_img" src="/static/img/2.jpg" alt="#">
+                            <div class="post_info">
+                                <div class="post_profile">
+                                    <div class="profilet_img">
+                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                    </div>
+                                    <p>user_name</p>
+                                </div>
+                                <div class="post_icon">
+                                    <img src="/static/img/icon/heart.svg" alt="">
+                                    <span>11.4K</span>
+                                    <img src="/static/img/icon/message-circle.svg" alt="">
+                                    <span>88</span>
+                                </div> 
+                            </div> 
+                        </div>
+                        <!--------------------------------- 삭제 --------------------------------->
+                        <div class="post_box">
+                            <img class="post_img" src="/static/img/2.jpg" alt="#">
+                            <div class="post_info">
+                                <div class="post_profile">
+                                    <div class="profilet_img">
+                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                    </div>
+                                    <p>user_name</p>
+                                </div>
+                                <div class="post_icon">
+                                    <img src="/static/img/icon/heart.svg" alt="">
+                                    <span>11.4K</span>
+                                    <img src="/static/img/icon/message-circle.svg" alt="">
+                                    <span>88</span>
+                                </div> 
+                            </div> 
+                        </div>
+                        <div class="post_box">
+                            <img class="post_img" src="/static/img/2.jpg" alt="#">
+                            <div class="post_info">
+                                <div class="post_profile">
+                                    <div class="profilet_img">
+                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                    </div>
+                                    <p>user_name</p>
+                                </div>
+                                <div class="post_icon">
+                                    <img src="/static/img/icon/heart.svg" alt="">
+                                    <span>11.4K</span>
+                                    <img src="/static/img/icon/message-circle.svg" alt="">
+                                    <span>88</span>
+                                </div> 
+                            </div> 
+                        </div><div class="post_box">
+                            <img class="post_img" src="/static/img/2.jpg" alt="#">
+                            <div class="post_info">
+                                <div class="post_profile">
+                                    <div class="profilet_img">
+                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                    </div>
+                                    <p>user_name</p>
+                                </div>
+                                <div class="post_icon">
+                                    <img src="/static/img/icon/heart.svg" alt="">
+                                    <span>11.4K</span>
+                                    <img src="/static/img/icon/message-circle.svg" alt="">
+                                    <span>88</span>
+                                </div> 
+                            </div> 
+                        </div><div class="post_box">
+                            <img class="post_img" src="/static/img/2.jpg" alt="#">
+                            <div class="post_info">
+                                <div class="post_profile">
+                                    <div class="profilet_img">
+                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                    </div>
+                                    <p>user_name</p>
+                                </div>
+                                <div class="post_icon">
+                                    <img src="/static/img/icon/heart.svg" alt="">
+                                    <span>11.4K</span>
+                                    <img src="/static/img/icon/message-circle.svg" alt="">
+                                    <span>88</span>
+                                </div> 
+                            </div> 
+                        </div><div class="post_box">
+                            <img class="post_img" src="/static/img/2.jpg" alt="#">
+                            <div class="post_info">
+                                <div class="post_profile">
+                                    <div class="profilet_img">
+                                        <img src="../static/img/1.jpg" alt="user_name_proflie">
+                                    </div>
+                                    <p>user_name</p>
+                                </div>
+                                <div class="post_icon">
+                                    <img src="/static/img/icon/heart.svg" alt="">
+                                    <span>11.4K</span>
+                                    <img src="/static/img/icon/message-circle.svg" alt="">
+                                    <span>88</span>
+                                </div> 
+                            </div> 
+                        </div>
+                        <!--------------------------------- 삭제 --------------------------------->
+                    </div>
+                    <!-- post -->  
+            </section>
+            <!-- content -->
+            <!-- left column -->
+            <!-- right column -->
+            <section class="right_col">
+                <div class="myproflie_box">
+                    <div class="profile">
+                        <div class="post_profile">
+                            <div class="profilet_img">
+                                <img src="../static/img/1.jpg" alt="user_name_proflie">
+                            </div>
+                            <p>user_name</p>
+                            <p>@user_ nickname</p>
+                        </div>
+                    </div>
+                    <div class="button_list">
+                        <button>내 페이지 보기</button>
+                        <button>프로필 편집</button>
+                        <button class="logout">로그아웃</button>
+                    </div>
+                    <div class="abuot">
+                        <div class="box">
+                            <span>324</span>
+                            <p>게시물</p>
+                        </div>
+                        <div class="box">
+                            <span>1.5 천</span>
+                            <p>팔로위</p>
+                        </div>
+                        <div class="box">
+                            <span>670</span>
+                            <p>팔로우</p>
+                        </div>
+                    </div>
+                    <div class="introduce">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus placeat nisi quas? Quo, consequatur! Laudantium cumque quaerat, fugit natus molestiae esse non amet autem quo suscipit sequi laborum iusto corrupti!</p>
+                    </div>
+                </div>
+            </section>
+            <!-- right column -->
+        </main>
+    </section>
+    <!-- 컨텐츠 -->
 </body>
 </html>
