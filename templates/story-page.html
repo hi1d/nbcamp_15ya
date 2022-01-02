@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!--jquery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!--css-->
@@ -12,40 +14,40 @@
     <title>Instagram * story </title>
 </head>
 <body>
-<div id="main">
-    <div id="header">
-        <img src="/static/icons/white-logo.png"/>
-        <img src="/static/icons/close.png" onclick='window.location.href = "/"'/>
-    </div>
-    <div id="story-view">
-        <div id="control">
-            <img src="/static/img/icon/arrow-left.png" id="prev" alt="{{para[0]}}" >
-            <img src="/static/img/icon/arrow-right.png" id="next" alt="{{para[1]}}">
+    <div id="main">
+        <div id="header">
+            <img src="/static/img/white-logo.png"/>
+            <img src="/static/img/close.png" onclick='window.location.href = "/"'/>
         </div>
-        <div class="story">
-            <div class="story-header">
-                <div class="left-wrapper">
-                    <img src="{{ arr[0].img_url }}"/>
-                    <p>{{ arr[0].id }}</p>
-                </div>
-                <div class="right-wrapper">
-                    <img src="/static/icons/add.PNG"/>
-                </div>
+        <div id="story-view">
+            <div id="control">
+                <img src="/static/img/arrow-left.png" id="prev" alt="{{ id[0] }}">
+                <img src="/static/img/arrow-right.png" id="next" alt="{{ id[1] }}">
             </div>
-            <div class="story-body">
-                <div class="img-slide">
-                    <img class="_img" src="{{ arr[0].story_img_1 }}"/>
-                    <img class="_img" src="{{ arr[0].story_img_2 }}"/>
-                    <img class="_img" src="{{ arr[0].story_img_3 }}"/>
+            <div class="story">
+                <div class="story-header">
+                    <div class="left-wrapper">
+                        <img id="user-profile" src="{{ img[0].img_url }}"/>
+                        <p id="user-nick">{{ img[0].id }}</p>
+                    </div>
+                    <div class="right-wrapper">
+                        <img src="/static/img/more@3x.png"/>
+                    </div>
                 </div>
-            </div>
-            <div class="story-footer">
-                <input class="senddm" placeholder="send message">
-                <img src="/static/icons/messenger.PNG"/>
+                <div class="story-body">
+                    <div class="img-slide">
+                        <img class="_img" src="{{ img[0].story_img_1 }}"/>
+                        <img class="_img" src="{{ img[0].story_img_2 }}"/>
+                        <img class="_img" src="{{ img[0].story_img_3 }}"/>
+                    </div>
+                </div>
+                <div class="story-footer">
+                    <input class="senddm" placeholder="send message">
+                    <img src="/static/img/dm@3x.png"/>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </body>
     <script src="/static/js/page.js" async></script>
 </html>
