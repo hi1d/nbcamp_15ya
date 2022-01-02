@@ -25,9 +25,10 @@ prevBtn.addEventListener('click', function () {
     }
 });
 
-$(document).ready(function () {
-    $(".story-on").click(function () {
-        $(this).removeClass("story-on");
-        $(this).addClass("story-off");
-    });
-});
+function dropStoryOffList() {
+    $.ajax({
+        type: 'POST',
+        url: '/off-list/drop',
+        data: {},
+    })
+}
