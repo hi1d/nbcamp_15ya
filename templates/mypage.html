@@ -9,24 +9,38 @@
     <title>Instagram</title>
 </head>
 <body>
-    <div id="desktop-header">
-        <div id="desktop-header-wrapper">
-            <div id="logo-wrapper">
-                <img src="../static/icons/logo.PNG" />
+    <header>
+        <div class="header">
+            <a href=""><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
+            <!-- nav icon -->
+            <div class="nav_items">
+                <a></a>
+                <ul class="icon_list">
+                    <li><a href="/">
+                        <span class="icon"><img src="/static/img/icon/home.svg" alt="home"></ion-icon></span>
+                        <span class="text">Feed</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/send.svg" alt="send"> </span>
+                        <span class="text">Direct</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/bell.svg" alt="bell"></span>
+                        <span class="text">notification</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/bookmark.svg" alt="bookmark"></span>
+                        <span class="text">Favorites</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/settings.svg" alt="setting"></span>
+                        <span class="text">Setting</span>
+                    </a></li>
+                </ul>
             </div>
-            <div id="search-wrapper">
-                <img src="../static/icons/search.png">
-                <p>검색</p>
-            </div>
-            <div id="header-icon-wrapper">
-                <img onclick='window.location.replace("/")' class="header-icon" src="../static/icons/home.PNG" />
-                <img class="header-icon" src="../static/icons/messenger.PNG" />
-                <img class="header-icon" src="../static/icons/add.PNG" />
-                <img class="header-icon" src="../static/icons/like.PNG" />
-                <img class="header-icon" src="../static/icons/explore.PNG" />
-            </div>
+            <!-- nav icon -->
         </div>
-    </div>
+    </header>
     <div id="mypage-profile">
         <div id="myinfo-container">
             <div id="left-wrapper">
@@ -85,8 +99,6 @@
             {% endfor %}
             <div class="bookmark-box" id="bookmark_box">
             </div>
-
-
         </div>
     </div>
 <script src="../static/js/bookmark.js"></script>
