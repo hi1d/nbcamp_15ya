@@ -15,7 +15,7 @@ function moveSlide(num) {
 }
 
 nextBtn.addEventListener('click', function () {
-    if (currentIdx < slideCount - 5) {
+    if (currentIdx < slideCount - 8) {
         moveSlide(currentIdx + 1)
     }
 });

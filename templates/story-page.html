@@ -9,9 +9,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!--css-->
-    <link rel="stylesheet" href="/static/css/page.css">
+    <link rel="stylesheet" href="/static/css/story-page.css">
 
-    <title>Instagram * story </title>
+    <title>Instagram * stories </title>
 </head>
 <body>
     <div id="main">
@@ -21,8 +21,8 @@
         </div>
         <div id="story-view">
             <div id="control">
-                <img src="/static/icons/arrow-left.png" id="prev" alt="{{ id[0] }}">
-                <img src="/static/icons/arrow-right.png" id="next" alt="{{ id[1] }}">
+                <img src="/static/icons/arrow-left.png" id="prev" alt="{{ nickname[0] }}">
+                <img src="/static/icons/arrow-right.png" id="next" alt="{{ nickname[1] }}">
             </div>
             <div class="story">
                 <div class="story-header">
@@ -31,7 +31,7 @@
                         <p id="user-nick">{{ img[0].id }}</p>
                     </div>
                     <div class="right-wrapper">
-                        <img src="/static/icons/more@3x.png"/>
+                        <img src="/static/icons/option.PNG"/>
                     </div>
                 </div>
                 <div class="story-body">
@@ -43,11 +43,11 @@
                 </div>
                 <div class="story-footer">
                     <input class="senddm" placeholder="send message">
-                    <img src="/static/icons/dm@3x.png"/>
+                    <img src="/static/icons/messenger.PNG"/>
                 </div>
             </div>
         </div>
     </div>
 </body>
-    <script src="/static/js/page.js" async></script>
+    <script src="/static/js/story-page.js"></script>
 </html>
