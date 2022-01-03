@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/index_style.css">
+    <link rel="stylesheet" href="../static/css/index_style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/static/js/index_script.js"></script>
+    <script type="text/javascript" src="../static/js/index_script.js"></script>
     <!-- cookie -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <!-- 피드.css -->
     <link rel="stylesheet" href="../static/css/feed.css">
-    <link rel="stylesheet" href="/static/css/story-container.css">
+    <link rel="stylesheet" href="../static/css/story-container.css">
     <!-- 파비콘 달기 -->
     <link rel="shortcut icon" href="../static/img/icon/favicon.png" type="image/x-icon">
     <title>15ya</title>
@@ -21,7 +21,7 @@
 <!-- header -->
 <header>
     <div class="header">
-        <a href="/"><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
+        <a href="/"><img class="logo" src="../static/img/icon/logo.PNG" alt="logo"></a>
         <!-- search box -->
         <div class="search_wrap">
             <!-- 검색창에 icon 넣기 -->
@@ -52,23 +52,23 @@
             <a id="feed_upload" class="add_post">+ Add post</a>
             <ul class="icon_list">
                 <li><a href="#">
-                    <span class="icon"><img src="/static/img/icon/home.svg" alt="home"></ion-icon></span>
+                    <span class="icon"><img src="../static/img/icon/home.svg" alt="home"></ion-icon></span>
                     <span class="text">Feed</span>
                 </a></li>
                 <li><a href="#">
-                    <span class="icon"><img src="/static/img/icon/send.svg" alt="send"> </span>
+                    <span class="icon"><img src="../static/img/icon/send.svg" alt="send"> </span>
                     <span class="text">Direct</span>
                 </a></li>
                 <li><a href="#">
-                    <span class="icon"><img src="/static/img/icon/bell.svg" alt="bell"></span>
+                    <span class="icon"><img src="../static/img/icon/bell.svg" alt="bell"></span>
                     <span class="text">notification</span>
                 </a></li>
                 <li><a href="#">
-                    <span class="icon"><img src="/static/img/icon/bookmark.svg" alt="bookmark"></span>
+                    <span class="icon"><img src="../static/img/icon/bookmark.svg" alt="bookmark"></span>
                     <span class="text">Favorites</span>
                 </a></li>
                 <li><a href="#">
-                    <span class="icon"><img src="/static/img/icon/settings.svg" alt="setting"></span>
+                    <span class="icon"><img src="../static/img/icon/settings.svg" alt="setting"></span>
                     <span class="text">Setting</span>
                 </a></li>
             </ul>
@@ -84,8 +84,8 @@
         <section class="left_col">
             <div class="stories_box">
                 <div id="control">
-                    <img id="prev" src="/static/img/icon/arrow-left.png"/>
-                    <img id="next" src="/static/img/icon/arrow-right.png"/>
+                    <img id="prev" src="../static/img/icon/arrow-left.png"/>
+                    <img id="next" src="../static/img/icon/arrow-right.png"/>
                 </div>
                 <div id="story-slide">
                     {% for user in on_list %}
@@ -125,13 +125,13 @@
                             <div class="post_icon">
                                 {% if feed.index in user.like_feed %}
                                     <img onclick='window.location.href = "/api/feed_like/{{ feed.index }}"'
-                                         src="/static/img/icon/heart_full.svg" alt="">
+                                         src="../static/img/icon/heart_full.svg" alt="">
                                 {% else %}
                                     <img onclick='window.location.href = "/api/feed_like/{{ feed.index }}"'
-                                         src="/static/img/icon/heart.svg" alt="">
+                                         src="../static/img/icon/heart.svg" alt="">
                                 {% endif %}
                                 <span>{{ feed.like }}</span>
-                                <img src="/static/img/icon/message-circle.svg" alt="">
+                                <img src="../static/img/icon/message-circle.svg" alt="">
                                 <span>{{ feed.comment | length }}</span>
                             </div>
                         </div>
@@ -189,7 +189,7 @@
 <!-- 피드 업로드 모달 -->
 <div class="modal_container" id="modal-container">
     <div class="modal_close">
-        <img src="/static/img/icon/close.png" alt="" id="modal_close">
+        <img src="../static/img/icon/close.png" alt="" id="modal_close">
     </div>
     <div class="modal_background">
         <div class="modal_back"></div>
@@ -224,9 +224,9 @@
 
 
 <!-- 피드업로드 -->
-<script src="/static/js/feed.js"></script>
-<script src="/static/js/comment.js"></script>
-<script src="/static/js/logout.js"></script>
-<script src="/static/js/story-container.js"></script>
+<script src="../static/js/feed.js"></script>
+<script src="../static/js/comment.js"></script>
+<script src="../static/js/logout.js"></script>
+<script src="../static/js/story-container.js"></script>
 </body>
 </html>
