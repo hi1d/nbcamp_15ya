@@ -21,14 +21,12 @@ nextBtn.addEventListener('click', function () {
         moveSlide(currentIdx + 1)
     } else if (currentIdx == slideCount - 1) {
 
-        let offId = $('#user-nick').html()
+        let offNickname = $('#user-nick').html()
         let offProfile = $('#user-profile').attr('src')
-        let offImg = $('._img').attr('src')
         let form_data = new FormData()
 
-        form_data.append('id', offId)
+        form_data.append('nickname', offNickname)
         form_data.append('profile', offProfile)
-        form_data.append('story_img_url',offImg)
 
         $.ajax({
             type: 'POST',

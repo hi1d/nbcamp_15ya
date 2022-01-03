@@ -23,7 +23,7 @@ section.wrap main .left_col .stories_box {
   float: left;
   width: 4.3rem;
   height: 5.6rem;
-  margin-top: 0.4rem;
+  margin-top: 0.6rem;
   overflow: hidden;
 }
 #story-slide .story-wrapper:not(:last-child) {
@@ -59,7 +59,7 @@ section.wrap main .left_col .stories_box {
 .story-wrapper > p {
   margin: 0;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 .stories_box #control #prev {
   position: absolute;
@@ -78,4 +78,61 @@ section.wrap main .left_col .stories_box {
   left: 96%;
   width: 1rem;
   margin-right: 0.3rem;
+}
+
+.add-story-modal {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.add-story-modal .modal-content {
+  background-color: white;
+  position: relative;
+  text-align: center;
+  border-radius: 5px;
+  width: 300px;
+  height: 160px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.modal-content > p {
+  font-size: 1rem;
+  margin-top: 40px;
+}
+
+.modal-content > input {
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  width: 70%;
+  height: 30px;
+  margin: 15px;
+}
+.modal-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 45px;
+  margin-top: 12px;
+}
+
+.modal-button > button {
+  width: 50%;
+  height: 100%;
+  border: 1px solid white;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-button > button:last-child {
+  background-color:#5b3e81;
+  color: white;
 }

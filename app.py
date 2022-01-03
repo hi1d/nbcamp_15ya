@@ -19,7 +19,6 @@ client = MongoClient(
     'mongodb+srv://15ya:camp15team@cluster0.hn03w.mongodb.net/cluster0?retryWrites=true&w=majority')
 db = client.db15ya
 
-
 # 토큰 유효성 검사
 def valid_token():
     token_receive = request.cookies.get('15ya_token')
@@ -73,7 +72,7 @@ def home():
                 {}, {'_id': 0})))[::-1]
 
             # 스토리 컨테이너
-            all_info = list(db.users.find({}))
+            all_info = list(db.storyarchive.find({}))
             off_info = list(db.story_off.find({}))
 
             # story-on 리스트
@@ -88,13 +87,13 @@ def home():
                             break
                         elif off_info[j]['nickname'] != all_info[i]['nickname'] and j == off_count - 1:
                             on_list.append(all_info[i])
+                on_list = list({one['nickname']: one for one in on_list}.values())
             elif off_count == 0:
-                on_list = all_info
+                on_list = list({one['nickname']: one for one in all_info}.values())
 
             # story-off 리스트 (중복처리)
-            off_list = list(
-                {off['nickname']: off for off in off_info}.values())
-
+            off_list = list({off['nickname']: off for off in off_info}.values())
+            
             return render_template('index.html', feeds=feeds, user=user_info, on_list=on_list, off_list=off_list)
     except TypeError:
         return redirect(url_for("login"))
@@ -448,9 +447,9 @@ def users_search():
 
 @app.route('/story/<nickname>')
 def showStories(nickname):
-    # 현재 userid가 스토리 on/off 중 어떤 리스트에 속해있는지 확인
     def onORoff(nickname):
-        all_info = list(db.users.find({}))
+        all_info = list(db.storyarchive.find({}))
+        all_info = list({one['nickname']: one for one in all_info}.values())
         all_count = len(all_info)
         off_info = list(db.story_off.find({}))
         off_count = len(off_info)
@@ -474,43 +473,47 @@ def showStories(nickname):
         elif next((x for x in off_list if x["nickname"] == nickname), None) is not None:
             return off_list
 
-    # 현재 스토리의 전/후 인덱스 id 전달
-    def idList(array, nickname):
-        cur_index = next((i for i, x in enumerate(
-            array) if x['nickname'] == nickname), None)
+    def idInfo(array, nickname):
+        cur_index = next((i for i, x in enumerate(array) if x['nickname'] == nickname), None)
 
         all_count = len(array)
-        if cur_index == 0:
-            next_story = array[cur_index + 1]
-            nickname_list = ['/', next_story['nickname']]
-        elif cur_index == all_count - 1:
-            prev_story = array[cur_index - 1]
-            nickname_list = [prev_story['nickname'], '/']
-        else:
-            prev_story = array[cur_index - 1]
-            next_story = array[cur_index + 1]
-            nickname_list = [prev_story['nickname'], next_story['nickname']]
-        return nickname_list
 
-    nickname_list = idList(onORoff(nickname), nickname)
-    img_list = list(db.users.find({'nickname': nickname}))
-    return render_template('story-page.html', img=img_list, nickname=nickname_list)
+        if all_count == 1 and cur_index == 0:
+            id_list = ['/','/']
+        elif all_count != 1 and cur_index == 0:
+            id_list = ['/', array[cur_index + 1]['nickname']]
+        elif cur_index == all_count - 1:
+            id_list = [array[cur_index - 1]['nickname'], '/']
+        else:
+            id_list = [array[cur_index - 1]['nickname'], array[cur_index + 1]['nickname']]
+        return id_list
+
+    id_list = idInfo(onORoff(nickname), nickname)
+
+    whos_story = list(db.users.find({'nickname': nickname}))
+    img_list = list(db.storyarchive.find({'nickname': nickname}))
+
+    return render_template('story-page.html', imgs=img_list, id=id_list, account=whos_story)
+
+
+@app.route('/upload/story', methods=['POST'])
+def uploadStory():
+    nickname = request.form['nickname']
+    story_img = request.form['story_img']
+    profile = request.form['profile']
+
+    doc = {'nickname': nickname, 'story_img': story_img, 'profile_image':profile}
+    db.storyarchive.insert_one(doc)
+    return jsonify({'msg': '업로드 완료!'})
 
 
 @app.route('/off-list/add', methods=['POST'])
 def addOffList():
     nickname = request.form['nickname']
-    profile = request.form['profile_image']
+    profile = request.form['profile']
 
     doc = {'nickname': nickname, 'profile_image': profile}
     db.story_off.insert_one(doc)
-
-    return True
-
-
-@app.route('/off-list/drop', methods=['POST'])
-def dropOffList():
-    db.story_off.drop()
     return True
 
 

@@ -87,7 +87,27 @@
                     <img id="prev" src="../static/img/icon/arrow-left.png"/>
                     <img id="next" src="../static/img/icon/arrow-right.png"/>
                 </div>
+                <div class="add-story-modal">
+                    <div class="modal-content">
+                        <p>Add to story</p>
+                        <input placeholder="이미지 url" id="give-url" name="{{ user.nickname }}" class="{{ user.profile_image }}">
+                        <div class="modal-button">
+                            <button onclick="closeModal()">
+                                cancel
+                            </button>
+                            <button onclick="addToStory()">
+                                add
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div id="story-slide">
+                    <div class="story-wrapper" onclick="openModal()">
+                        <div class="story-on">
+                            <img src="/static/img/icon/plus.png"/>
+                        </div>
+                        <p>스토리 올리기</p>
+                    </div>
                     {% for user in on_list %}
                         {% set profile = user.profile_image %}
                         {% set nick = user.nickname %}

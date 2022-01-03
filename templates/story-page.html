@@ -21,24 +21,24 @@
         </div>
         <div id="story-view">
             <div id="control">
-                <img src="/static/img/icon/arrow-left.png" id="prev" alt="{{ nickname[0] }}">
-                <img src="/static/img/icon/arrow-right.png" id="next" alt="{{ nickname[1] }}">
+                <img src="/static/img/icon/arrow-left.png" id="prev" alt="{{ id[0] }}">
+                <img src="/static/img/icon/arrow-right.png" id="next" alt="{{ id[1] }}">
             </div>
             <div class="story">
                 <div class="story-header">
                     <div class="left-wrapper">
-                        <img id="user-profile" src="{{ img[0].profile_image }}"/>
-                        <p id="user-nick">{{ img[0].nickname }}</p>
+                        <img id="user-profile" src="{{ account[0].profile_image }}"/>
+                        <p id="user-nick">{{ account[0].nickname }}</p>
                     </div>
                     <div class="right-wrapper">
-                        <img src="/static/img/icon/option.PNG"/>
+                        <img src="/static/img/icon/more-horizontal.svg"/>
                     </div>
                 </div>
                 <div class="story-body">
                     <div class="img-slide">
-                        <img class="_img" src="{{ img[0].story_img_1 }}"/>
-                        <img class="_img" src="{{ img[0].story_img_2 }}"/>
-                        <img class="_img" src="{{ img[0].story_img_3 }}"/>
+                        {% for img in imgs %}
+                        <img class="_img" src="{{ img.story_img }}"/>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="story-footer">
