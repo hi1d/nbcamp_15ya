@@ -140,7 +140,7 @@
                                 <div class="profilet_img">
                                     <img id="feed_profile_{{feed.index}}" src="{{ feed.profile_image }}" alt="user_name_proflie">
                                 </div>
-                                <p id="feed_author_{{feed.index}}">{{ feed.author }}</p>
+				<p onclick='window.location.href="/mypage/{{feed.email}}"' id="feed_author_{{feed.index}}">{{ feed.author }}</p>
                             </div>
                             <div class="post_icon">
                                 {% if feed.index in user.like_feed %}
@@ -177,7 +177,7 @@
                 </div>
                 <div class="button_list">
                     <button onclick='window.location.href = "/mypage/{{ user.email }}"'>내 페이지 보기</button>
-                        <button onclick='window.location.href = "/users/setting/"'>프로필 편집</button>
+                        <button onclick='window.location.href = "/users_setting/"'>프로필 편집</button>
                     <button onclick="logout()" class="logout">로그아웃</button>
                 </div>
                 <div class="abuot">
@@ -188,7 +188,7 @@
                     </div>
                     <div class="box">
                         <span>{{ user.follower_list | length }}</span>
-                        <p>팔로윙</p>
+                        <p>팔로잉</p>
                     </div>
                     <div class="box">
                         <span>{{ user.follow_list | length }}</span>

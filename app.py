@@ -133,7 +133,7 @@ def login():
             'exp': datetime.utcnow() + timedelta(seconds=60*60)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-        token = dumps(token)
+        
         return jsonify({'result': 'success', 'token': token})
     else:
         return jsonify({'result': 'failed', 'msg': '아이디 또는 비밀번호가 일치하지 않습니다.'})
