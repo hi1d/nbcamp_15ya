@@ -10,7 +10,7 @@ function save_profile() {
 
     $.ajax({
         type: 'POST',
-        url: '/users/setting/',
+        url: '/users_setting/',
         data: {name_give: name, nickname_give: nickname, status_message_give: status_message},
         success: function (response) {
             alert(response['msg'])

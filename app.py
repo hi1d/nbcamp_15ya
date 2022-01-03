@@ -20,6 +20,8 @@ client = MongoClient(
 db = client.db15ya
 
 # 토큰 유효성 검사
+
+
 def valid_token():
     token_receive = request.cookies.get('15ya_token')
 
@@ -35,15 +37,14 @@ def valid_token():
         try:
             nickname = search['nickname']
         except TypeError:
-            return redirect(url_for('check_status'))
+            return redirect(url_for('login'))
         else:
             profile_image = search['profile_image']
             like_feed = search['like_feed']
-            like_comment = search['like_comment']
             follow_list = search['follow_list']
             name = search['name']
             return {'result': True, 'email': payload['id'], 'nickname': nickname,
-                    'profile_image': profile_image, 'like_feed': like_feed, 'like_comment': like_comment,
+                    'profile_image': profile_image, 'like_feed': like_feed,
                     'follow_list': follow_list, 'name': name}
 
 
@@ -87,13 +88,16 @@ def home():
                             break
                         elif off_info[j]['nickname'] != all_info[i]['nickname'] and j == off_count - 1:
                             on_list.append(all_info[i])
-                on_list = list({one['nickname']: one for one in on_list}.values())
+                on_list = list(
+                    {one['nickname']: one for one in on_list}.values())
             elif off_count == 0:
-                on_list = list({one['nickname']: one for one in all_info}.values())
+                on_list = list(
+                    {one['nickname']: one for one in all_info}.values())
 
             # story-off 리스트 (중복처리)
-            off_list = list({off['nickname']: off for off in off_info}.values())
-            
+            off_list = list(
+                {off['nickname']: off for off in off_info}.values())
+
             return render_template('index.html', feeds=feeds, user=user_info, on_list=on_list, off_list=off_list)
     except TypeError:
         return redirect(url_for("login"))
@@ -474,18 +478,20 @@ def showStories(nickname):
             return off_list
 
     def idInfo(array, nickname):
-        cur_index = next((i for i, x in enumerate(array) if x['nickname'] == nickname), None)
+        cur_index = next((i for i, x in enumerate(
+            array) if x['nickname'] == nickname), None)
 
         all_count = len(array)
 
         if all_count == 1 and cur_index == 0:
-            id_list = ['/','/']
+            id_list = ['/', '/']
         elif all_count != 1 and cur_index == 0:
             id_list = ['/', array[cur_index + 1]['nickname']]
         elif cur_index == all_count - 1:
             id_list = [array[cur_index - 1]['nickname'], '/']
         else:
-            id_list = [array[cur_index - 1]['nickname'], array[cur_index + 1]['nickname']]
+            id_list = [array[cur_index - 1]['nickname'],
+                       array[cur_index + 1]['nickname']]
         return id_list
 
     id_list = idInfo(onORoff(nickname), nickname)
@@ -502,7 +508,7 @@ def uploadStory():
     story_img = request.form['story_img']
     profile = request.form['profile']
 
-    doc = {'nickname': nickname, 'story_img': story_img, 'profile_image':profile}
+    doc = {'nickname': nickname, 'story_img': story_img, 'profile_image': profile}
     db.storyarchive.insert_one(doc)
     return jsonify({'msg': '업로드 완료!'})
 
@@ -548,7 +554,7 @@ def follow(email):
 # 내 이메일로 내 프로필 정보 찾기 > 프로필 사진, 이름, 닉네임, 전화번호, 상태메시지
 
 
-@app.route("/users/setting/", methods=["GET", 'POST'])
+@app.route("/users_setting/", methods=["GET", 'POST'])
 def user_setting_get():
     valid = valid_token()
     try:

@@ -14,9 +14,8 @@ function login() {
                     alert(response['msg'])
                 }
                 else{
-                    let token = JSON.parse(response['token'])
 
-                    $.cookie('15ya_token', token, {path: '/'});
+                    $.cookie('15ya_token', response['token'], {path: '/'});
                     window.location.replace('/')
                 }
 
