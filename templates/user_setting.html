@@ -14,7 +14,7 @@
     <!-- header -->
     <header>
         <div class="header">
-            <a href=""><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
+            <a href="/"><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
             <!-- nav icon -->
             <div class="nav_items">
                 <a></a>
@@ -82,7 +82,7 @@
                 <div id="right-user-nickname-box">
                     <input id="nickname-input" type="text" value="{{ user.nickname }}">
                     <div class="desc-box">
-                       <div class="desc">대부분의 경우 14일 이내에 사용자 이름을 다시 15_ya(으)로 변경할 수 있습니다.</div>
+                       <div class="desc">대부분의 경우 14일 이내에 사용자 이름을 다시 {{user.nickname}}(으)로 변경할 수 있습니다.</div>
                    </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ function save_profile() {
 
     $.ajax({
         type: 'POST',
-        url: '/users/setting',
+        url: '/users/setting/',
         data: {name_give: name, nickname_give: nickname, status_message_give: status_message},
         success: function (response) {
             alert(response['msg'])
@@ -30,7 +30,7 @@ function change_profile(){
     form_data.append('file',file)
     $.ajax({
         type: 'POST',
-        url: '/api/change_profile',
+        url: '/api/change_profile/',
         data: form_data,
         cache: false,
         contentType:false,

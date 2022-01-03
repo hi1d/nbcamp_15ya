@@ -21,7 +21,7 @@
 <!-- header -->
 <header>
     <div class="header">
-        <a href=""><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
+        <a href="/"><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
         <!-- search box -->
         <div class="search_wrap">
             <!-- 검색창에 icon 넣기 -->
@@ -84,8 +84,8 @@
         <section class="left_col">
             <div class="stories_box">
                 <div id="control">
-                    <img id="prev" src="/static/icons/arrow-left.png"/>
-                    <img id="next" src="/static/icons/arrow-right.png"/>
+                    <img id="prev" src="/static/img/icon/arrow-left.png"/>
+                    <img id="next" src="/static/img/icon/arrow-right.png"/>
                 </div>
                 <div id="story-slide">
                     {% for user in on_list %}
@@ -93,7 +93,7 @@
                         {% set nick = user.nickname %}
                         <div class="story-wrapper" onclick='window.location.href = "/story/{{ nick }}"'>
                             <div class="story-on">
-                                <img src="{{ profile }}}"/>
+                                <img src="{{ profile }}"/>
                             </div>
                             <p>{{ nick }}</p>
                         </div>
@@ -103,7 +103,7 @@
                         {% set nick = off.nickname %}
                         <div class="story-wrapper" onclick='window.location.href = "/story/{{ nick }}"'>
                             <div class="story-off">
-                                <img src="{{ profile }}}"/>
+                                <img src="{{ profile }}"/>
                             </div>
                             <p>{{ nick }}</p>
                         </div>
@@ -114,13 +114,13 @@
             <div class="main_posts">
                 {% for feed in feeds %}
                     <div class="post_box">
-                        <img class="post_img" src="{{ feed.image }}" alt="#">
+                        <img class="post_img" id="feed_img_{{feed.index}}" src="{{ feed.image }}" alt="#" onclick="feed_show({{feed.index}})">
                         <div class="post_info">
                             <div class="post_profile">
                                 <div class="profilet_img">
-                                    <img src="{{ feed.profile_image }}" alt="user_name_proflie">
+                                    <img id="feed_profile_{{feed.index}}" src="{{ feed.profile_image }}" alt="user_name_proflie">
                                 </div>
-                                <p>{{ feed.author }}</p>
+                                <p id="feed_author_{{feed.index}}">{{ feed.author }}</p>
                             </div>
                             <div class="post_icon">
                                 {% if feed.index in user.like_feed %}
@@ -150,6 +150,7 @@
                         <div class="profilet_img">
                             <img src="{{ user.profile_image }}" alt="user_name_proflie">
                         </div>
+                        
                         <p>{{ user.name }}</p>
                         <p>@{{ user.nickname }}</p>
                     </div>
@@ -185,15 +186,14 @@
     </main>
 </section>
 <!-- 컨텐츠 -->
-<!-- 피드 모달 -->
+<!-- 피드 업로드 모달 -->
 <div class="modal_container" id="modal-container">
     <div class="modal_close">
-        <img src="../static/icons/close.png" alt="" id="modal_close">
+        <img src="/static/img/icon/close.png" alt="" id="modal_close">
     </div>
     <div class="modal_background">
         <div class="modal_back"></div>
         <div class="modal_wrap">
-            <label>　</label>
             <div class="modal_wrap_header">
                 <p>　</p>
                 <p>새 게시물 만들기</p>
@@ -215,13 +215,18 @@
                     <textarea name="" id="write_content" cols="30" rows="10" placeholder="문구 입력..."></textarea>
                 </div>
             </div>
+            <div class="modal_wrap_show_wrap" >
+                
+            </div>
         </div>
     </div>
 </div>
+
+
 <!-- 피드업로드 -->
-<script src="../static/js/feed.js"></script>
-<script src="../static/js/comment.js"></script>
-<script src="../static/js/logout.js"></script>
+<script src="/static/js/feed.js"></script>
+<script src="/static/js/comment.js"></script>
+<script src="/static/js/logout.js"></script>
 <script src="/static/js/story-container.js"></script>
 </body>
 </html>

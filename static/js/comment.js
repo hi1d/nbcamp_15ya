@@ -1,5 +1,5 @@
 function write_comment(index){
-    let content = $(`#comment_write_${index}`).val()
+    let content = $('#comment_up').val()
     $.ajax({
         type: "POST",
         url: "/api/comment",
@@ -10,7 +10,7 @@ function write_comment(index){
         success: function (response) {
             if (response['result'] == 'success') {
                 alert(response['msg'])
-                window.location.replace('/api/feed_upload')
+                window.location.reload()
             }
             else{
                 alert(response['msg'])
@@ -23,7 +23,7 @@ function write_comment(index){
 function delete_comment(index, comment_index){
     $.ajax({
         type: "POST",
-        url: "/api/comment_delete",
+        url: "/api/comment_delete/",
         data: {
             index_give : index,
             comment_index_give: comment_index
@@ -31,11 +31,11 @@ function delete_comment(index, comment_index){
         success: function (response) {
             if (response['result'] == 'success') {
                 alert(response['msg'])
-                window.location.replace('/api/feed_upload')
+                window.location.reload()
             }
             else{
                 alert(response['msg'])
-                window.location.replace('/api/feed_upload')
+                window.location.reload()
             }
 
         },

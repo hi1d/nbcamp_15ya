@@ -1,6 +1,6 @@
 $(document).ready(function(){
     init()
-});
+})
 
 
 // 초기화 함수
@@ -10,6 +10,9 @@ function init(){
     $('#modal_upload').hide()
     $('#modal_next').show()
     $('.modal_wrap_content_wrap').show()
+    $('.modal_wrap_header').show()
+    $('.modal_wrap_show_wrap').hide()
+
 
     $('.modal_wrap').css({
         width: "700px",
@@ -180,6 +183,150 @@ function bookmark(index){
 });
 }
 
-function test(){
-    alert('hello')
+function feed_show(index){
+    $.ajax({
+        type: "POST",
+        url: "/api/feed_show/",
+        data: {
+            index_give:index
+        },
+        success: function (response) {
+            if (response['result'] == 'success'){
+                let feed = JSON.parse(response['feed'])
+                let image = feed['image']
+                let profile_image = feed['profile_image']
+                let author = feed['author']
+                let email = feed['email']
+                let content = feed['content']
+                let comment = feed['comment']
+                let like = feed['like']
+                var index = feed['index']
+                
+                let user = response['user']
+                let like_feed = user['like_feed']
+                let user_email = user['email']
+                let like_icon = "../static/img/icon/heart.svg"
+                
+                for (let i=0; i<like_feed.length;i++){
+                    if (like_feed[i] == index){
+                        like_icon = "../static/img/icon/heart_full.svg"
+                    }
+                }
+                
+                $('#modal-container').show()
+                $('.modal_wrap_show_wrap').empty()
+                $('.modal_wrap_show_wrap').show()
+                $('.modal_wrap_content_wrap').hide()
+                $('.right_col').hide()
+                $('.modal_wrap_header').hide()
+                $('.modal_wrap').css({
+                    width: "960px",
+                })
+                if (email == user_email){
+                    let temp_html = `
+                
+                    <img class="modal_wrap_write_content_left" src="${image}">
+                        
+                        <div class="modal_wrap_write_content_right">
+                            <div class="write_header">
+                                <img src="${profile_image}" alt="">
+                                <div class="show_text">
+                                    <p> ${author} </p>
+                                    <span>${content}</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="feed_comment">
+                            </div>
+                            <div class="comment_info">
+                                <div class="comment_icon">
+                                <div>
+                                    <img onclick='window.location.href = "/api/feed_like/${ index }"' src="${like_icon}" alt="">  
+                                    <img onclick="feed_delete(${index})" src="../static/img/icon/delete.png">                          
+                                </div>
+                                    <img onclick="bookmark(${index})" src="../static/img/icon/bookmark.svg" alt="">
+                                </div>
+                                <p>좋아요 ${like}개</p>
+                            </div>
+        
+                            <div class="write_comment">
+                                <input type="text" id="comment_up" class="comment_write" placeholder="댓글 달기...">
+                                <a onclick="write_comment(${index})">게시</a>
+                            </div>
+                        </div>`
+                                       
+                            $('.modal_wrap_show_wrap').append(temp_html)
+                } else {
+                    let temp_html = `
+                
+            <img class="modal_wrap_write_content_left" src="${image}">
+                
+                <div class="modal_wrap_write_content_right">
+                    <div class="write_header">
+                        <img src="${profile_image}" alt="">
+                        <div class="show_text">
+                            <p> ${author} </p>
+                            <span>${content}</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="feed_comment">
+                    </div>
+                    <div class="comment_info">
+                        <div class="comment_icon">
+                        <div>
+                            <img onclick='window.location.href = "/api/feed_like/${index}"' src="${like_icon}" alt="">  
+                        </div>
+                            <img onclick="bookmark(${index})" src="../static/img/icon/bookmark.svg" alt="">
+                        </div>
+                        <p>좋아요 ${like}개</p>
+                    </div>
+
+                    <div class="write_comment">
+                        <input type="text" id="comment_up" class="comment_write" placeholder="댓글 달기...">
+                        <a onclick="write_comment(${index})">게시</a>
+                    </div>
+                </div>`
+                               
+                    $('.modal_wrap_show_wrap').append(temp_html)
+                }
+                
+
+
+                    
+
+                    for (let i=0;i<comment.length; i++){
+                        if (comment[i]['email'] == user_email){
+                            temp_html2 = `
+                            <div class=comment_user>
+                                             <div>
+                                                 <img src="${comment[i]['profile_image']}">
+                                                 <span> ${comment[i]['author']} </span>
+                                                 <p> ${comment[i]['content']} </p>
+                                             </div>
+                                             <a onclick="delete_comment(${index},${comment[i]['comment_index']})">삭제</a>
+                                         </div>       
+                            </div>                 
+                                     `
+                            $('.feed_comment').append(temp_html2)             
+                        }else {
+                        temp_html2 = `
+                        <div class=comment_user>
+                                         <div>
+                                             <img src="${comment[i]['profile_image']}">
+                                             <span> ${comment[i]['author']} </span>
+                                             <p> ${comment[i]['content']} </p>
+                                         </div>
+                                     </div>       
+                        </div>                 
+                                 `
+                        $('.feed_comment').append(temp_html2)
+                        }
+                    }
+            } else {
+                alert('불러오기 실패')
+                window.location.reload()
+            }
+        },
+    });
 }

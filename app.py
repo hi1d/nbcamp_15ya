@@ -1,6 +1,3 @@
-from collections import UserString
-from os import pwrite, terminal_size
-from flask.wrappers import Response
 from pymongo import MongoClient
 import jwt
 import datetime
@@ -10,6 +7,8 @@ from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 import re
 from uuid import uuid4
+from bson.json_util import dumps
+
 
 app = Flask(__name__)
 
@@ -93,7 +92,8 @@ def home():
                 on_list = all_info
 
             # story-off 리스트 (중복처리)
-            off_list = list({off['nickname']: off for off in off_info}.values())
+            off_list = list(
+                {off['nickname']: off for off in off_info}.values())
 
             return render_template('index.html', feeds=feeds, user=user_info, on_list=on_list, off_list=off_list)
     except TypeError:
@@ -177,6 +177,8 @@ def register():
         # 중복 닉네임 검사
         elif nickname_check(nickname_receive):
             return jsonify({'result': 'failed', 'msg': '중복된 닉네임이 있습니다.'})
+        elif re.search('[^a-zA-Z0-9-_.]+', nickname_receive) is not None:
+            return jsonify({'result': 'failed', 'msg': ' 영문, 숫자, -_. 만 사용이 가능합니다.'})
 
         doc = {
             'email': email_receive,
@@ -188,7 +190,6 @@ def register():
             'status_message': '',
             'bookmark': [],
             'like_feed': [],
-            'like_comment': [],
             'follow_list': [],
             'follower_list': []
         }
@@ -321,6 +322,7 @@ def comment():
             content = request.form['content_give']
             author = valid['nickname']
             comment = (db.feeds.find_one({'index': index}))['comment']
+            profile = valid['profile_image']
 
             try:
                 last_comment_index = comment[-1]['comment_index']
@@ -330,7 +332,7 @@ def comment():
                 comment_index = last_comment_index+1
             comment.append({'comment_index': comment_index, 'email': email,
                             'content': content, 'author': author,
-                            'comment_like': 0})
+                            'comment_like': 0, 'profile_image': profile})
 
             db.feeds.update_one({'index': index}, {
                                 '$set': {'comment': comment}})
@@ -342,7 +344,7 @@ def comment():
 # comment 삭제
 
 
-@ app.route('/api/comment_delete', methods=['POST'])
+@ app.route('/api/comment_delete/', methods=['POST'])
 def comment_delete():
     valid = valid_token()
     try:
@@ -370,35 +372,6 @@ def comment_delete():
         return redirect(url_for('home'))
 
 
-# comment_like
-
-
-@ app.route('/api/comment_like/<index>,<comment_index>')
-def comment_like(index, comment_index):
-    index = int(index)
-    comment_index = int(comment_index)
-    data = like(index)
-    user_like_list = data['user']['like_comment']
-    comment_like_count = data['feed']['comment']
-    target_index = -1
-    for i in range(len(comment_like_count)):
-        if comment_like_count[i]['comment_index'] == comment_index:
-            target_index = i
-    if comment_index in user_like_list:
-        user_like_list.pop(user_like_list.index(comment_index))
-        comment_like_count[target_index]['comment_like'] -= 1
-    else:
-        user_like_list.append(comment_index)
-        comment_like_count[target_index]['comment_like'] += 1
-
-    db.users.update_one({'email': data['user']['email']}, {
-                        '$set': {'like_comment': user_like_list}})
-    db.feeds.update_one({'index': index}, {
-                        '$set': {'comment': comment_like_count}})
-
-    return redirect(url_for('feed_upload'))
-
-
 #-------------은경(마이페이지 부분)----------------------#
 
 # 내 이메일로 내 프로필 정보 찾기
@@ -415,6 +388,7 @@ def mypage(email):
                 {'email': email}, {'_id': 0, 'password': 0, 'email': 0})
             my_email = valid['email']
             my_follow_list = valid['follow_list']
+
             return render_template('mypage.html', user=user_list, feed=feed_list, my_email=my_email, follow_list=my_follow_list)
     except TypeError:
         return redirect(url_for('login'))
@@ -502,8 +476,8 @@ def showStories(nickname):
 
     # 현재 스토리의 전/후 인덱스 id 전달
     def idList(array, nickname):
-        cur_index = next((i for i, x in enumerate(array) if x['nickname'] == nickname), None)
-
+        cur_index = next((i for i, x in enumerate(
+            array) if x['nickname'] == nickname), None)
 
         all_count = len(array)
         if cur_index == 0:
@@ -520,8 +494,7 @@ def showStories(nickname):
 
     nickname_list = idList(onORoff(nickname), nickname)
     img_list = list(db.users.find({'nickname': nickname}))
-    return render_template('story-page.html', img=img_list, nickname = nickname_list)
-
+    return render_template('story-page.html', img=img_list, nickname=nickname_list)
 
 
 @app.route('/off-list/add', methods=['POST'])
@@ -530,7 +503,7 @@ def addOffList():
     profile = request.form['profile_image']
 
     doc = {'nickname': nickname, 'profile_image': profile}
-    db.story_off.insert_one(doc)  
+    db.story_off.insert_one(doc)
 
     return True
 
@@ -572,14 +545,30 @@ def follow(email):
 # 내 이메일로 내 프로필 정보 찾기 > 프로필 사진, 이름, 닉네임, 전화번호, 상태메시지
 
 
-@app.route("/users/setting/", methods=["GET"])
+@app.route("/users/setting/", methods=["GET", 'POST'])
 def user_setting_get():
     valid = valid_token()
     try:
         if valid['result'] == True:
-            user_list = (db.users.find_one(
-                {'email': valid['email']}, {'_id': False, 'password': 0}))
-            return render_template('user_setting.html', user=user_list)
+            if request.method == 'GET':
+                user_list = (db.users.find_one(
+                    {'email': valid['email']}, {'_id': False, 'password': 0}))
+                return render_template('user_setting.html', user=user_list)
+            else:
+                name_receive = request.form['name_give']
+                nickname_receive = request.form['nickname_give']
+                status_message_receive = request.form['status_message_give']
+                if valid['nickname'] == nickname_receive:
+                    pass
+                elif nickname_check(nickname_receive):
+                    return jsonify({'result': 'failed', 'msg': '중복된 닉네임이 있습니다.'})
+                elif re.search('[^a-zA-Z0-9-_.]+', nickname_receive) is not None:
+                    return jsonify({'result': 'failed', 'msg': ' 영문, 숫자, -_. 만 사용이 가능합니다.'})
+                db.users.update_one({'email': valid['email']}, {'$set': {'name': name_receive, 'nickname': nickname_receive,
+                                                                         'status_message': status_message_receive}})
+                db.feeds.update_many({'email': valid['email']},
+                                     {'$set': {'author': nickname_receive}})
+                return jsonify({'msg': '프로필이 저장되었습니다.'})
     except TypeError:
         return redirect(url_for('login'))
 
@@ -587,28 +576,7 @@ def user_setting_get():
 # 내 이메일로 내 계정 찾아서 수정한 내 프로필 정보 업데이트 해주기 > 이름, 닉네임, 전화번호, 상태메시지
 
 
-@app.route("/users/setting", methods=["POST"])
-def user_setting_post():
-    valid = valid_token()
-    try:
-        if valid['result'] == True:
-            name_receive = request.form['name_give']
-            nickname_receive = request.form['nickname_give']
-            status_message_receive = request.form['status_message_give']
-            if valid['nickname'] == nickname_receive:
-                pass
-            elif nickname_check(nickname_receive):
-                return jsonify({'result': 'failed', 'msg': '중복된 닉네임이 있습니다.'})
-            db.users.update_one({'email': valid['email']}, {'$set': {'name': name_receive, 'nickname': nickname_receive,
-                                                                     'status_message': status_message_receive}})
-            db.feeds.update_many({'email': valid['email']},
-                                 {'$set': {'author': nickname_receive}})
-            return jsonify({'msg': '프로필이 저장되었습니다.'})
-    except TypeError:
-        return redirect(url_for('login'))
-
-
-@app.route('/api/change_profile', methods=['POST'])
+@ app.route('/api/change_profile/', methods=['POST'])
 def change_profile():
     valid = valid_token()
     file = request.files['file']
@@ -621,6 +589,19 @@ def change_profile():
     db.feeds.update_many({'email': valid['email']},
                          {'$set': {'profile_image': image}})
     return jsonify({'result': 'success', 'msg': '프로필변경'})
+
+
+@app.route('/api/feed_show/', methods=['POST'])
+def feed_show():
+    valid = valid_token()
+    index = int(request.form['index_give'])
+    feed = db.feeds.find_one({'index': index})
+    comment_user = db.users.find_one({'email': valid['email']}, {
+        '_id': 0, 'password': 0})
+    if feed is None:
+        return redirect(url_for('home'))
+    feed = dumps(feed)
+    return jsonify({'result': 'success', 'feed': feed, 'user': comment_user})
 
 
 if __name__ == '__main__':

@@ -1,81 +1,81 @@
 html {
-    font-size: 16px;
+  font-size: 16px;
 }
 /*스토리*/
 section.wrap main .left_col .stories_box {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 30px;
-    display: flex;
-    position: relative;
-    border: 1px solid lightgray;
-    border-radius: 3px;
-    background-color: white;
-    overflow: hidden;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 30px;
+  display: flex;
+  position: relative;
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  background-color: white;
+  overflow: hidden;
 }
 .stories_box #story-slide {
-    position: absolute;
-    top: 0;
-    left: 1.8rem;
-    transition: left 0.5s ease-out;
+  position: absolute;
+  top: 0;
+  left: 1.8rem;
+  transition: left 0.5s ease-out;
 }
 #story-slide .story-wrapper {
-    float: left;
-    width: 4.3rem;
-    height: 5.6rem;
-    margin-top: 0.4rem;
-    overflow: hidden;
+  float: left;
+  width: 4.3rem;
+  height: 5.6rem;
+  margin-top: 0.4rem;
+  overflow: hidden;
 }
 #story-slide .story-wrapper:not(:last-child) {
-    margin-right: 1.2rem;
+  margin-right: 1.2rem;
 }
 .story-wrapper .story-on {
-    width: 3.9rem;
-    height: 3.9rem;
-    margin: 0 auto;
-    border: 3px solid transparent;
-    border-radius: 50%;
-    background-image: linear-gradient(#f6f6f6, #f6f6f6),
-    linear-gradient(to right, #ff7700, #ff3636aa, #ff00c3);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
+  width: 3.9rem;
+  height: 3.9rem;
+  margin: 0 auto;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background-image: linear-gradient(#f6f6f6, #f6f6f6),
+    linear-gradient(#21246b, #f2b0ac);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
 }
 .story-wrapper .story-off {
-    width: 3.9rem;
-    height: 3.9rem;
-    margin: 0 auto;
-    border: 3px solid transparent;
-    border-radius: 50%;
-    background-image: linear-gradient(#f6f6f6, #f6f6f6),
+  width: 3.9rem;
+  height: 3.9rem;
+  margin: 0 auto;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background-image: linear-gradient(#f6f6f6, #f6f6f6),
     linear-gradient(#c4c4c4, #c4c4c4);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
 }
 .story-wrapper > div > img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 .story-wrapper > p {
-    margin: 0;
-    text-align: center;
-    font-size: 0.8rem;
+  margin: 0;
+  text-align: center;
+  font-size: 0.8rem;
 }
 .stories_box #control #prev {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 96%;
-    cursor: pointer;
-    width: 1rem;
-    margin-left: 0.3rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 96%;
+  cursor: pointer;
+  width: 1rem;
+  margin-left: 0.3rem;
 }
 .stories_box #control #next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    left: 96%;
-    width: 1rem;
-    margin-right: 0.3rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  left: 96%;
+  width: 1rem;
+  margin-right: 0.3rem;
 }
