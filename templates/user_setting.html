@@ -1,33 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="/static/user_setting.js"></script>
-    <link rel="stylesheet" href="../static/user_setting.css">
-    <title>Instagram</title>
+    <link rel="stylesheet" href="/static/css/user_setting.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="/static/js/user_setting.js"></script>
+    <!-- 파비콘 달기 -->
+    <title>15ya</title>
 </head>
 <body>
-    <div id="desktop-header">
-        <div id="desktop-header-wrapper">
-            <div id="logo-wrapper">
-                <img src="/static/user_setting_img/insta-logo.png" />
+    <!-- header -->
+    <header>
+        <div class="header">
+            <a href=""><img class="logo" src="/static/img/icon/logo.PNG" alt="logo"></a>
+            <!-- nav icon -->
+            <div class="nav_items">
+                <a></a>
+                <ul class="icon_list">
+                    <li><a href="/">
+                        <span class="icon"><img src="/static/img/icon/home.svg" alt="home"></ion-icon></span>
+                        <span class="text">Feed</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/send.svg" alt="send"> </span>
+                        <span class="text">Direct</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/bell.svg" alt="bell"></span>
+                        <span class="text">notification</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/bookmark.svg" alt="bookmark"></span>
+                        <span class="text">Favorites</span>
+                    </a></li>
+                    <li><a href="#">
+                        <span class="icon"><img src="/static/img/icon/settings.svg" alt="setting"></span>
+                        <span class="text">Setting</span>
+                    </a></li>
+                </ul>
             </div>
-            <div id="search-wrapper">
-                <img src="/static/user_setting_img/search@3x.png">
-                <p>검색</p>
-            </div>
-            <div id="header-icon-wrapper">
-                <img class="header-icon" src="/static/user_setting_img/home@3x.png" />
-                <img class="header-icon" src="/static/user_setting_img/dm@3x.png" />
-                <img class="header-icon" src="/static/user_setting_img/trending@3x.png" />
-                <img class="header-icon" src="/static/user_setting_img/like@3x.png" />
-                <img class="header-icon" src="/static/user_setting_img/more@3x.png" />
-            </div>
+            <!-- nav icon -->
         </div>
-    </div>
+    </header>
+    <!-- header -->
+    <!-- content -->
     <div id="main-container">
         <div id="left-container">
             <div id="profile-edit-box">
@@ -36,58 +54,52 @@
         </div>
         <div id="right-container">
             <div id="profile-image-box">
-<!--                <div id="left-profile-image">-->
-<!--                    <img src="/static/user_setting_img/xmas.jpg"/>-->
-<!--                </div>-->
-<!--                <div id="right-profile-image">-->
-<!--                    <button>프로필 사진 바꾸기</button>-->
-<!--                </div>-->
+               <div id="left-profile-image">
+                <img src="{{ user.profile_image }}" alt="">
+            </div>
+               <div id="right-profile-image">
+                   <button onclick="open_input()">프로필 사진 바꾸기</button>
+                   <input type="file"id="profile_image" onchange="change_profile()" accept="image/*">
+                </div>
             </div>
             <div id="name-box">
-<!--                <div id="left-name-box">-->
-<!--                    <p class="left-p">이름</p>-->
-<!--                </div>-->
-<!--                <div id="right-name-box">-->
-<!--                    <input id="name-input" type="text" value="sip_oya">-->
-<!--                    <div class="desc-box">-->
-<!--                        <div class="desc">사람들이 이름, 별명 또는 비즈니스 이름 등 회원님의 알려진 이름을 사용하여 회원님의 계정을 찾을 수 있도록 도와주세요.</div>-->
-<!--                        <div id="div1"></div>-->
-<!--                        <div class="desc">이름은 14일 안에 두 번만 변경할 수 있습니다.</div>-->
-<!--                    </div>-->
-<!--                </div>-->
+               <div id="left-name-box">
+                    <p class="left-p">이름</p>
+                </div>
+                <div id="right-name-box">
+                    <input id="name-input" type="text" value="{{ user.name }}">
+                    <div class="desc-box">
+                        <div class="desc">사람들이 이름, 별명 또는 비즈니스 이름 등 회원님의 알려진 이름을 사용하여 회원님의 계정을 찾을 수 있도록 도와주세요.</div>
+                       <div id="div1"></div>
+                       <div class="desc">이름은 14일 안에 두 번만 변경할 수 있습니다.</div>
+                   </div>
+                 </div> 
             </div>
             <div id="user-nickname-box">
-<!--                <div id="left-user-nickname-box">-->
-<!--                    <p class="left-p">사용자 이름</p>-->
-<!--                </div>-->
-<!--                <div id="right-user-nickname-box">-->
-<!--                    <input id="nickname-input" type="text" value="15_yaya">-->
-<!--                    <div class="desc-box">-->
-<!--                        <div class="desc">대부분의 경우 14일 이내에 사용자 이름을 다시 15_ya(으)로 변경할 수 있습니다.</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-            </div>
-            <div id="phone-number-box">
-<!--                <div id="left-phone-number-box">-->
-<!--                    <p class="left-p">전화번호</p>-->
-<!--                </div>-->
-<!--                <div id="right-phone-number-box">-->
-<!--                    <input id="phone-number-input" class="input-box" type="text" value="01012347894">-->
-<!--                </div>-->
+               <div id="left-user-nickname-box">
+                    <p class="left-p">닉네임</p>
+                </div>
+                <div id="right-user-nickname-box">
+                    <input id="nickname-input" type="text" value="{{ user.nickname }}">
+                    <div class="desc-box">
+                       <div class="desc">대부분의 경우 14일 이내에 사용자 이름을 다시 15_ya(으)로 변경할 수 있습니다.</div>
+                   </div>
+                </div>
             </div>
             <div id="status-message-box">
-<!--                <div id="left-status-message-box">-->
-<!--                    <p class="left-p">상태 메세지</p>-->
-<!--                </div>-->
-<!--                <div id="right-status-message-box">-->
-<!--                    <input id="status-message-input" type="text" value="십오야 화이팅!">-->
-<!--                </div>-->
+               <div id="left-status-message-box">
+                   <p class="left-p">상태메세지</p>
+               </div>
+               <div id="right-status-message-box">
+                   <input id="status-message-input" type="text" value="{{ user.status_message }}">
+               </div>
             </div>
             <div id="submit-btn-box">
                 <div id="div2"></div>
-                <button id="submit-btn" onclick="save_profile()">제출</button>
+                <input id="submit-btn" onclick="save_profile()" placeholder="제출"></div>
             </div>
         </div>
     </div>
+
 </body>
 </html>

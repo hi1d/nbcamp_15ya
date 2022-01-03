@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../static/css/feed.css">
     <link rel="stylesheet" href="/static/css/story-container.css">
     <!-- 파비콘 달기 -->
+    <link rel="shortcut icon" href="../static/img/icon/favicon.png" type="image/x-icon">
     <title>15ya</title>
 </head>
 <body>
@@ -155,13 +156,14 @@
                 </div>
                 <div class="button_list">
                     <button onclick='window.location.href = "/mypage/{{ user.email }}"'>내 페이지 보기</button>
-                    <button>프로필 편집</button>
+                        <button onclick='window.location.href = "/users/setting/"'>프로필 편집</button>
                     <button onclick="logout()" class="logout">로그아웃</button>
                 </div>
                 <div class="abuot">
                     <div class="box">
                         <span>{{ user.posting }}</span>
                         <p>게시물</p>
+
                     </div>
                     <div class="box">
                         <span>{{ user.follower_list | length }}</span>

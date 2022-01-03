@@ -37,3 +37,4 @@
 # 2021.01.03 (월)
 >user_setting.html, js, css 추가
 >>user_setting app.py 작성
+>>>user_setting - db 연결 프로필변경, 사용자정보 변경 연동완료.

@@ -2,66 +2,68 @@ body {
   margin: 0 auto;
 }
 
-/* 헤더 */
-#desktop-header {
-  background-color: white;
-  width: 100%;
+/***** header *****/ /* 645px + 355px*/
+header {
   position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid lightgray;
+  width: 100%;
+  height: 60px;
+  background-color: #fff;
+  border-bottom: 1px solid #dfdfdf;
+  z-index: 2;
 }
-#desktop-header #desktop-header-wrapper {
-  max-width: 950px;
-  padding: 10px 20px;
+header div.header {
+  width: 1000px;
+  height: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-/* 헤더 - 로고 */
-#desktop-header-wrapper #logo-wrapper {
-  width: 33.3%;
+header div.header a {
+  width: auto;
+  height: 100%;
 }
-#desktop-header-wrapper #logo-wrapper img {
-  width: 40%;
-  height: 40%;
+header div.header a img.logo {
+  width: auto;
+  height: 80%;
+  margin-top: 10%;
 }
 
-/* 헤더 - 검색 */
-#desktop-header-wrapper #search-wrapper {
-  margin: 0 5%;
+/***** nav icon *****/
+header div.header .nav_items {
+  width: 485px;
+  height: 100%;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-start;
-  color: gray;
-  width: 33.3%;
-  height: 34px;
-  border: 1px solid lightgray;
-  background-color: rgba(215, 215, 215, 0.1);
-  border-radius: 3px;
-  padding-left: 15px;
 }
-#desktop-header-wrapper #search-wrapper img {
-  width: 4%;
-  opacity: 0.5;
+header div.header .nav_items .add_post {
+  width: 140px;
+  height: 36px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 36px;
+  color: #fefefe;
+  background: linear-gradient(#21246b, #5b3e81);
+  border-radius: 5px;
+  display: block;
 }
-#desktop-header-wrapper #search-wrapper p {
-  margin-left: 2%;
-  font-size: 13px;
-}
-
-/* 헤더 - 아이콘 */
-#desktop-header-wrapper #header-icon-wrapper {
+header div.header .nav_items .icon_list {
+  width: 300px;
+  height: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-end;
-  width: 33.3%;
+  list-style: none;
 }
-#desktop-header-wrapper #header-icon-wrapper img {
-  margin: 0% 3.5%;
-  width: 8%;
+header div.header .nav_items .icon_list li {
+  width: 60px;
+  text-align: center;
+}
+header div.header .nav_items .icon_list li .text {
+  display: none;
 }
 
 /* 마이페이지-프로필*/
