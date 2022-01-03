@@ -1,91 +1,22 @@
 html {
     font-size: 16px;
 }
-
-#desktop-header {
-    top:0;
-    left:0;
-    background-color: white;
-    width: 100%;
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid lightgray;
-}
-
-#desktop-header #desktop-header-wrapper {
-    max-width: 950px;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#desktop-header-wrapper #logo-wrapper {
-    width: 33.3%;
-}
-
-#desktop-header-wrapper #logo-wrapper img {
-    width: 40%;
-    height: 40%;
-}
-
-/* 헤더 - 검색 */
-#desktop-header-wrapper #search-wrapper {
-    margin: 0 5%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    color: gray;
-    width: 33.3%;
-    height: 34px;
-    border: 1px solid lightgray;
-    background-color: rgba(215, 215, 215, 0.1);
-    border-radius: 3px;
-    padding-left: 15px;
-}
-
-#desktop-header-wrapper #search-wrapper img {
-    width: 4%;
-    opacity: 0.5;
-}
-
-#desktop-header-wrapper #search-wrapper p {
-    margin-left: 2%;
-    font-size: 13px;
-}
-
-#desktop-header-wrapper #header-icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 33.3%;
-}
-
-#desktop-header-wrapper #header-icon-wrapper img {
-    margin: 0% 3.5%;
-    width: 8%;
-}
-
 /*스토리*/
-#story-container{
-    /*나중에 지우기*/
-    margin: 8rem auto;
-
+section.wrap main .left_col .stories_box {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 30px;
     display: flex;
     position: relative;
-    width: 30rem;
-    height: 6rem;
     border: 1px solid lightgray;
     border-radius: 3px;
     background-color: white;
     overflow: hidden;
 }
-
-#story-container #story-slide {
+.stories_box #story-slide {
     position: absolute;
-    top: 0; left: 1.8rem;
+    top: 0;
+    left: 1.8rem;
     transition: left 0.5s ease-out;
 }
 #story-slide .story-wrapper {
@@ -130,20 +61,21 @@ html {
     text-align: center;
     font-size: 0.8rem;
 }
-#story-container #control #prev {
+.stories_box #control #prev {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    right: 96%;
     cursor: pointer;
     width: 1rem;
     margin-left: 0.3rem;
 }
-#story-container #control #next {
+.stories_box #control #next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    left: 28.5rem;
+    left: 96%;
     width: 1rem;
     margin-right: 0.3rem;
 }

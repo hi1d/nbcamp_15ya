@@ -72,7 +72,30 @@ def home():
                                           '_id': 0, 'password': 0})
             feeds = (list(db.feeds.find(
                 {}, {'_id': 0})))[::-1]
-            return render_template('index.html', feeds=feeds, user=user_info)
+
+            # 스토리 컨테이너
+            all_info = list(db.users.find({}))
+            off_info = list(db.story_off.find({}))
+
+            # story-on 리스트
+            all_count = len(all_info)
+            off_count = len(off_info)
+
+            if len(off_info) != 0:
+                on_list = []
+                for i in range(all_count):
+                    for j in range(off_count):
+                        if off_info[j]['nickname'] == all_info[i]['nickname']:
+                            break
+                        elif off_info[j]['nickname'] != all_info[i]['nickname'] and j == off_count - 1:
+                            on_list.append(all_info[i])
+            elif off_count == 0:
+                on_list = all_info
+
+            # story-off 리스트 (중복처리)
+            off_list = list({off['nickname']: off for off in off_info}.values())
+
+            return render_template('index.html', feeds=feeds, user=user_info, on_list=on_list, off_list=off_list)
     except TypeError:
         return redirect(url_for("login"))
 
@@ -449,10 +472,10 @@ def users_search():
 ##스토리 페이지##
 
 
-@app.route('/story/<userid>')
-def showStories(userid):
+@app.route('/story/<nickname>')
+def showStories(nickname):
     # 현재 userid가 스토리 on/off 중 어떤 리스트에 속해있는지 확인
-    def onORoff(userid):
+    def onORoff(nickname):
         all_info = list(db.users.find({}))
         all_count = len(all_info)
         off_info = list(db.story_off.find({}))
@@ -462,51 +485,53 @@ def showStories(userid):
             on_list = []
             for i in range(all_count):
                 for j in range(off_count):
-                    if off_info[j]['id'] == all_info[i]['id']:
+                    if off_info[j]['nickname'] == all_info[i]['nickname']:
                         break
-                    elif off_info[j]['id'] != all_info[i]['id'] and j == off_count - 1:
+                    elif off_info[j]['nickname'] != all_info[i]['nickname'] and j == off_count - 1:
                         on_list.append(all_info[i])
         elif off_count == 0:
             on_list = all_info
         # off 리스트
         off_info = list(db.story_off.find({}))
-        off_list = list({off['id']: off for off in off_info}.values())
+        off_list = list({off['nickname']: off for off in off_info}.values())
 
-        if next((x for x in on_list if x["id"] == userid), None) is not None:
+        if next((x for x in on_list if x["nickname"] == nickname), None) is not None:
             return on_list
-        elif next((x for x in off_list if x["id"] == userid), None) is not None:
+        elif next((x for x in off_list if x["nickname"] == nickname), None) is not None:
             return off_list
 
     # 현재 스토리의 전/후 인덱스 id 전달
-    def idList(array, userid):
-        cur_index = next((i for i, x in enumerate(
-            array) if x['id'] == userid), None)
+    def idList(array, nickname):
+        cur_index = next((i for i, x in enumerate(array) if x['nickname'] == nickname), None)
+
 
         all_count = len(array)
         if cur_index == 0:
             next_story = array[cur_index + 1]
-            id_list = ['/', next_story['id']]
+            nickname_list = ['/', next_story['nickname']]
         elif cur_index == all_count - 1:
             prev_story = array[cur_index - 1]
-            id_list = [prev_story['id'], '/']
+            nickname_list = [prev_story['nickname'], '/']
         else:
             prev_story = array[cur_index - 1]
             next_story = array[cur_index + 1]
-            id_list = [prev_story['id'], next_story['id']]
-        return id_list
+            nickname_list = [prev_story['nickname'], next_story['nickname']]
+        return nickname_list
 
-    id_list = idList(onORoff(userid), userid)
-    img_list = list(db.users.find({'id': userid}))
-    return render_template('story-page.html', img=img_list, id=id_list)
+    nickname_list = idList(onORoff(nickname), nickname)
+    img_list = list(db.users.find({'nickname': nickname}))
+    return render_template('story-page.html', img=img_list, nickname = nickname_list)
+
 
 
 @app.route('/off-list/add', methods=['POST'])
 def addOffList():
-    id = request.form['id']
-    profile = request.form['profile']
+    nickname = request.form['nickname']
+    profile = request.form['profile_image']
 
-    doc = {'id': id, 'img_url': profile}
-    db.story_off.insert_one(doc)
+    doc = {'nickname': nickname, 'profile_image': profile}
+    db.story_off.insert_one(doc)  
+
     return True
 
 

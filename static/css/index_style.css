@@ -237,16 +237,16 @@ section.wrap main .left_col {
   align-items: center;
 }
 
-section.wrap main .left_col .stories_box {
-  width: 100%;
-  height: 100px;
-  margin-bottom: 30px;
-  text-align: center;
-  background-color: #dfdfdf;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+/*section.wrap main .left_col .stories_box {*/
+/*  width: 100%;*/
+/*  height: 100px;*/
+/*  margin-bottom: 30px;*/
+/*  text-align: center;*/
+/*  background-color: #dfdfdf;*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*}*/
 
 /* section.wrap main .left_col .main_posts{display: grid; grid-template-columns:  repeat(2, minmax(0,1fr)); column-gap: 3%; row-gap: 30px;} */ /*grid layout delete*/
 section.wrap main .left_col .main_posts .post_box {
