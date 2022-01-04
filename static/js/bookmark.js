@@ -1,9 +1,10 @@
-function bookmark(){
+function bookmark_show(email){
     $.ajax({
-type: "GET",
-url: "/bookmark",
-data: {},
+type: "POST",
+url: "/bookmark_show",
+data: {email_give:email},
 success: function (response) {
+    alert('test')
     let bookmark = response['bookmark']
     $('.post-box').hide()
     $('.bookmark-box').show()
@@ -25,3 +26,6 @@ function mypage_feed(){
     $('.post-box').show()
 }
 
+function test(test){
+    alert(test)
+}

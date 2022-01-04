@@ -230,7 +230,7 @@ function feed_show(index){
                         <div class="modal_wrap_write_content_right">
                             <div class="write_header">
                                 <img src="${profile_image}" alt="">
-                                <div class="show_text">
+                                <div cwhite-space: nowrap;lass="show_text">
                                     <p> ${author} </p>
                                     <span>${content}</span>
                                 </div>

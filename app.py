@@ -133,7 +133,7 @@ def login():
             'exp': datetime.utcnow() + timedelta(seconds=60*60)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-        
+
         return jsonify({'result': 'success', 'token': token})
     else:
         return jsonify({'result': 'failed', 'msg': '아이디 또는 비밀번호가 일치하지 않습니다.'})
@@ -403,35 +403,39 @@ def mypage(email):
 # 북마크
 
 
-@ app.route('/bookmark', methods=['GET', 'POST'])
+@ app.route('/bookmark_show', methods=['POST'])
+def bookmark_show():
+    print('1')
+    email = request.form['email_give']
+    target_bookmark = (db.users.find_one(
+        {'email': email}))['bookmark']
+    feeds = db.feeds.find({}, {'_id': 0, 'email': 0})
+    bookmark_feed = []
+    for feed in feeds:
+        if feed['index'] in target_bookmark:
+            bookmark_feed.append(feed['image'])
+        else:
+            continue
+    return jsonify({'bookmark': bookmark_feed})
+
+
+@ app.route('/bookmark', methods=['POST'])
 def bookmark():
     valid = valid_token()
     try:
         if valid['result'] == True:
-            if request.method == 'GET':
-                target_bookmark = (db.users.find_one(
-                    {'email': valid['email']}))['bookmark']
-                feeds = db.feeds.find({}, {'_id': 0, 'email': 0})
-                bookmark_feed = []
-                for feed in feeds:
-                    if feed['index'] in target_bookmark:
-                        bookmark_feed.append(feed['image'])
-                    else:
-                        continue
-                return jsonify({'bookmark': bookmark_feed})
-            else:
-                email = valid['email']
-                index = int(request.form['index_give'])
-                target = (db.users.find_one({'email': email}))['bookmark']
-                if index in target:
-                    target.pop(target.index(index))
-                    db.users.update_one({'email': email}, {
-                                        '$set': {'bookmark': target}})
-                    return jsonify({'result': 'success', 'msg': '북마크 취소'})
-                target.append(index)
+            email = valid['email']
+            index = int(request.form['index_give'])
+            target = (db.users.find_one({'email': email}))['bookmark']
+            if index in target:
+                target.pop(target.index(index))
                 db.users.update_one({'email': email}, {
                                     '$set': {'bookmark': target}})
-                return jsonify({'result': 'success', 'msg': '북마크완료'})
+                return jsonify({'result': 'success', 'msg': '북마크 취소'})
+            target.append(index)
+            db.users.update_one({'email': email}, {
+                                '$set': {'bookmark': target}})
+            return jsonify({'result': 'success', 'msg': '북마크완료'})
     except TypeError:
         return redirect(url_for('login'))
 
