@@ -70,15 +70,15 @@ $(document).ready(function() {
 
     // right column fixed
     function right_col_fixed(){
-            var body_width = $('body').width()
-            var main_width = $('section.wrap main').width()
-            var left_col = $('.left_col').width()
-            var pixed_size = (body_width - main_width)/2 + left_col
-            if (pixed_size < left_col){
-                $('.right_col').hide()
-            } else{
-                $('.right_col').css('left', pixed_size)
-                $('.right_col').show()
-            }
-    };
+        var body_width = $('body').width()
+        var main_width = $('section.wrap main').width()
+        var left_col = $('.left_col').width()
+        var pixed_size = (body_width - main_width)/2 + left_col
+        if (pixed_size < left_col){
+            $('.right_col').css('display', 'none')
+        } else{
+            $('.right_col').css('left', pixed_size)
+            $('.right_col').css('display','block')
+        }
+};
 });
