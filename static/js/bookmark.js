@@ -4,7 +4,6 @@ type: "POST",
 url: "/bookmark_show",
 data: {email_give:email},
 success: function (response) {
-    alert('test')
     let bookmark = response['bookmark']
     $('.post-box').hide()
     $('.bookmark-box').show()
@@ -24,8 +23,4 @@ success: function (response) {
 function mypage_feed(){
     $('.bookmark-box').hide()
     $('.post-box').show()
-}
-
-function test(test){
-    alert(test)
 }
