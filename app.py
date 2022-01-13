@@ -8,6 +8,9 @@ from datetime import datetime, timedelta
 import re
 from uuid import uuid4
 from bson.json_util import dumps
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 app = Flask(__name__)
@@ -17,7 +20,10 @@ SECRET_KEY = '15ya'
 
 client = MongoClient(
     'mongodb+srv://15ya:camp15team@cluster0.hn03w.mongodb.net/cluster0?retryWrites=true&w=majority')
+# client = MongoClient('localhost', 27017)
 db = client.db15ya
+
+model = tf.keras.models.load_model('./static/model/flower_model.h5')
 
 # 토큰 유효성 검사
 
@@ -615,6 +621,45 @@ def feed_show():
         return redirect(url_for('home'))
     feed = dumps(feed)
     return jsonify({'result': 'success', 'feed': feed, 'user': comment_user})
+
+
+@app.route('/flower', methods=['GET', 'POST'])
+def flower():
+    valid = valid_token()
+    if request.method == 'GET':
+        user_info = db.users.find_one({'email': valid['email']}, {
+            '_id': 0, 'password': 0})
+        return render_template('flower.html', user=user_info)
+    else:
+        file = request.files['file_give']
+        save_to = f'./static/img/flower/save/1.png'
+        file.save(save_to)
+
+        return redirect(url_for('flower_show'))
+
+
+@app.route('/api/flower_show')
+def flower_show():
+    test_datagen = ImageDataGenerator(rescale=1./255)
+    test_dir = './static/img/flower'
+    test_generator = test_datagen.flow_from_directory(
+        test_dir,
+        target_size=(224, 224),
+        color_mode="rgb",
+        shuffle=False,
+        class_mode=None,
+        batch_size=1)
+    pred = model.predict(test_generator)
+    classes = {0: 'daisy', 1: 'dandelion',
+               2: 'rose', 3: 'sunflower', 4: 'tulip'}
+    kor_name = {'daisy':'데이지','dandelion':'민들레속',
+                'rose':'장미','sunflower':'해바라기','tulip':'튤립'}
+    pred_label = classes[np.argmax(pred[-1])]
+    img = '../static/img/flower/'+pred_label+'.jpeg'
+    name = kor_name[pred_label]
+
+
+    return jsonify({'result':'success','img':img,'name':name})
 
 
 if __name__ == '__main__':

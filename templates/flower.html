@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/index_style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../static/js/index_script.js"></script>
+    <link rel="stylesheet" href="../static/css/flower.css">
+    <!-- 파비콘 달기 -->
+    <link rel="shortcut icon" href="../static/img/icon/favicon.png" type="image/x-icon">
+    <title>15ya</title>
+</head>
+<body>
+<!-- header -->
+<header>
+    <div class="header">
+        <a href="/"><img class="logo" src="../static/img/icon/logo.png" alt="logo"></a>
+        <!-- search box -->
+        <div class="search_wrap">
+            <!-- 검색창에 icon 넣기 -->
+            <input type="text" id="search_input" class="search_input" value="" placeholder="검색">
+            <div>
+                <span></span>
+                <span></span>
+            </div>
+            <div>
+                <span></span>
+            </div>
+            <div class="search_box">
+                <div class="search_list">
+                    <div id="search_result_list" class="search_result_list">
+                    </div>
+                    <div class="recent_searches_box">
+                        <h4>최신 검색 항목</h4>
+                        <div class="recent_searches_list">
+                            <p>최신 검색 항목 없음.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- search box -->
+        <!-- nav icon -->
+        <div class="nav_items">
+            <a id="feed_upload" class="add_post" onclick="show()">My Flower</a>
+            <ul class="icon_list">
+                <li><a href="#">
+                    <span class="icon"><img src="../static/img/icon/home.svg" alt="home"></ion-icon></span>
+                    <span class="text">Feed</span>
+                </a></li>
+                <li><a href="#">
+                    <span class="icon"><img src="../static/img/icon/send.svg" alt="send"> </span>
+                    <span class="text">Direct</span>
+                </a></li>
+                <li><a href="#">
+                    <span class="icon"><img src="../static/img/icon/bell.svg" alt="bell"></span>
+                    <span class="text">notification</span>
+                </a></li>
+                <li><a href="#">
+                    <span class="icon"><img src="../static/img/icon/bookmark.svg" alt="bookmark"></span>
+                    <span class="text">Favorites</span>
+                </a></li>
+                <li><a href="#">
+                    <span class="icon"><img src="../static/img/icon/settings.svg" alt="setting"></span>
+                    <span class="text">Setting</span>
+                </a></li>
+            </ul>
+        </div>
+        <!-- nav icon -->
+    </div>
+</header>
+<!-- header -->
+<!-- content -->
+<section class="wrap">
+    <main>
+        <!-- left column -->
+        <section class="left_col">
+            <!-- post -->
+            <div class="main_posts">
+                            <h1 style="font-size:50px">　　　　　　　　　　　⬆️</h1>
+                            <h1>It's Testing Service.　　</h1>
+                            <br>
+                            <h2>Try Search, you're Flower.　　　　　　　　　　　</h2>
+                            <br>
+                    <img src="../static/img/flower/daisy.jpeg">
+                    <img src="../static/img/flower/dandelion.jpeg">
+                    <img src="../static/img/flower/rose.jpeg">
+                    <img src="../static/img/flower/sunflower.jpeg">
+                    <img src="../static/img/flower/tulip.jpeg">
+                    
+
+            </div>
+            <!-- post -->
+        </section>
+        <!-- content -->
+        <!-- left column -->
+        <!-- right column -->
+        <section class="right_col">
+            <div class="myproflie_box">
+                <div class="profile">
+                    <div class="post_profile">
+                        <div class="profilet_img">
+                            <img src="{{ user.profile_image }}" alt="user_name_proflie">
+                        </div>
+                        
+                        <p>{{ user.name }}</p>
+                        <p>@{{ user.nickname }}</p>
+                    </div>
+                </div>
+                <div class="button_list">
+                    <button onclick='window.location.href = "/mypage/{{ user.email }}"'>내 페이지 보기</button>
+                        <button onclick='window.location.href = "/users_setting/"'>프로필 편집</button>
+                    <button onclick="logout()" class="logout">로그아웃</button>
+                </div>
+                <div class="abuot">
+                    <div class="box">
+                        <span>{{ user.posting }}</span>
+                        <p>게시물</p>
+
+                    </div>
+                    <div class="box">
+                        <span>{{ user.follower_list | length }}</span>
+                        <p>팔로잉</p>
+                    </div>
+                    <div class="box">
+                        <span>{{ user.follow_list | length }}</span>
+                        <p>팔로우</p>
+                    </div>
+                </div>
+                <div class="introduce">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus placeat nisi quas? Quo,
+                        consequatur! Laudantium cumque quaerat, fugit natus molestiae esse non amet autem quo suscipit
+                        sequi laborum iusto corrupti!</p>
+                </div>
+            </div>
+        </section>
+        <!-- right column -->
+    </main>
+</section>
+<!-- 컨텐츠 -->
+<div class="flower_modal_container" id="flower_modal_container">
+    <div class="modal_background">
+        <h1></h1>
+    </div>
+    <div class="modal_content_container">
+        <div id="1">
+            <h3 onclick="open_file()">Try up, you're Image</h3>
+            <br>
+            <input type="file" id="file_up" onchange="file_upload()" accept="image/*">
+        </div>
+        <div id="2">
+            <img id="loading" src="../static/img/loading.gif" >
+            
+        </div>       
+    </div>
+
+    <img src="../static/img/icon/close.png" id="close_icon">
+</div>
+
+<script src="../static/js/flower.js"></script>
+</body>
+</html>
