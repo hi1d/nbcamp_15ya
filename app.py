@@ -11,6 +11,7 @@ from bson.json_util import dumps
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import img_to_array, load_img
 
 
 app = Flask(__name__)
@@ -660,6 +661,24 @@ def flower_show():
 
 
     return jsonify({'result':'success','img':img,'name':name})
+
+
+
+@app.route('/img_tagging/human_or_pet')
+def human_or_pet():
+    model = tf.keras.models.load_model('../static/model/human_or_pet.h5')
+
+    img =load_img('이미지파일경로', target_size=(150,150))
+    x = img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+
+    images = np.vstack([x])
+    classes = model.predict(images, batch_size=10)
+    if classes[0][0] == 1:
+        result = '인물'
+    else:
+        result = '반려동물'
+    return result
 
 
 if __name__ == '__main__':
